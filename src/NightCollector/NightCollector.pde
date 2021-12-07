@@ -9,12 +9,17 @@ float  basketSpeed = 0.1;
 float  basketPosX  = 0;
 float  basketPosY  = 700;
 
+Star   star;
+float  starSpeed   = 4;
+float  starPosX    = 500;
+float  starPosY    = -270;
 
 
 void settings()
 {
   size(1000, 800);
   basket           = new Basket("basket.png", 100);
+  star             = new Star  ("star.png"  ,  34);
 }
 
 void draw(){
@@ -24,6 +29,10 @@ void draw(){
   //basket
   basketPosX = basketPosX+(mouseX-basketPosX)*basketSpeed; //action: roll to mouseX-Position
   basket.render(basketPosX, basketPosY);
+  
+  //star
+  starPosY = starPosY + starSpeed; //action: vertical movement
+  star.render(starPosX, starPosY);
 }
 
 

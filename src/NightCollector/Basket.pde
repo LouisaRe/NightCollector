@@ -28,7 +28,7 @@ public class Basket{
     push();
     translate(xPos-(basketWidth/2),yPos);
     scale(1,1);
-    image(basket, 0,0);
+    image(basket, 0, 0);
     pop();
   }
   
