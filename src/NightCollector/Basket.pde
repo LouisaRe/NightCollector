@@ -17,7 +17,7 @@ public class Basket{
   
   void render(float xPos, float yPos){
     
-    // Prevent basket from running beyond screen
+    //prevent basket from running beyond screen
     if(xPos <= basketWidth/2){
       xPos = basketWidth/2;
     }

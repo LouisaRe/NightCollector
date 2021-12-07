@@ -5,9 +5,9 @@
 - [X] Create base scene
 - [X] Implement basket
   - [X] Mouse movement
-- [ ] Implement stars
-  - [ ] Vertical movement
-  - [ ] Random spawning
+- [X] Implement stars
+  - [X] Vertical movement
+  - [X] Random spawning
 - [ ] Collision detection
   - [ ] Score counting
 - [ ] Mountains
