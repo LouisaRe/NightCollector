@@ -3,8 +3,8 @@
 ### Main Features
 
 - [X] Create base scene
-- [ ] Implement basket
-  - [ ] Mouse movement
+- [X] Implement basket
+  - [X] Mouse movement
 - [ ] Implement stars
   - [ ] Vertical movement
   - [ ] Random spawning
