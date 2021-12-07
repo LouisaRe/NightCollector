@@ -2,7 +2,7 @@
 
 ### Main Features
 
-- [ ] Create base scene
+- [X] Create base scene
 - [ ] Implement basket
   - [ ] Mouse movement
 - [ ] Implement stars
