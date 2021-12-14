@@ -1,67 +1,66 @@
-//Window
+//window
 int windowWidth    = 1000;
 int windowHeight   =  800;
 
-//Colors
+//colors
 color  bgColor1    = color(  7,  22,  62);
 color  bgColor2    = color(196, 177, 161);
 void   night()     {verticalGradient(0, 0, width, height, bgColor1, bgColor2);}
 
-//Elements
-Basket basket;
-float  basketSpeed = 0.1;
-float  basketPosX  = 0;
-float  basketPosY  = 700;
+//stars
+ArrayList<Star>  stars = new ArrayList<Star>();
+float            millisBetweenStars;
+int              starTimer;
 
-ArrayList<Star> stars = new ArrayList<Star>();
-float  starSpeed   = 4 + random(2);
-int    timer;
+//basket
+Basket basket;
+
+//mountain
+Mountain mountain;
+
 
 
 void settings()
 {
-  size(windowWidth, windowHeight);
-  timer            = millis();
-  basket           = new Basket("basket.png", 100);
-  stars.add(new Star  ("star.png"  ,  34));
+  size(windowWidth, windowHeight);  
+  stars.add(           new Star  ("star.png"  ,  34));
+  basket             = new Basket("basket.png", 100) ;
+  mountain           = new Mountain(  0, windowHeight,   0, 400, 
+                                    400, windowHeight, 300, 400);
+  millisBetweenStars = 1000 + random(1000);
+  starTimer          = millis();
 }
 
 void draw(){
   //background
   night();
   
-  //all create a new star all 2 sec.
-  if (millis() - timer >= 2000) {
-    createNewStar();
-    timer = millis();
-  }
+  //mountain
+  mountain.moveMountain(sin(millis()/1000), -2 * sin(millis()/1000),0,0); //TODO: Connect movement to Audio
   
   //stars
-  for(int i = 0; i < stars.size(); i = i+1){
-    
-    starSpeed   = 4 + random(2);
-    starPosX    = random(windowWidth);
-    
-    //star
-    starPosY = starPosY + starSpeed; //action: vertical movement
-    stars.get(i).render(stars.get(i).starPosX, starPosY);
+  if (millis() - starTimer >= millisBetweenStars) { //create a new star after a certain time
+    createNewStar();
+    millisBetweenStars = 1000 + random(1000);
+    starTimer = millis();
+  }
+  for(int i = 0; i < stars.size(); i = i+1){ //existing stars
+    stars.get(i).moveStar();
   }
   
   //basket
-  basketPosX = basketPosX+(mouseX-basketPosX)*basketSpeed; //action: roll to mouseX-Position
-  basket.render(basketPosX, basketPosY);
-  
-  
+  basket.moveBasket();
 }
 
-private void createNewStar(){
-  stars.add(new Star  ("star.png"  ,  34));
-}
 
-//Helper functions
+//helper functions:
 //############################################################
 
-void verticalGradient(int x, int y, float width, float height, color color1, color color2){
+private void createNewStar(){
+  stars.add(new Star("star.png", 34));
+}
+
+private void verticalGradient(int x, int y, float width, float height, color color1, color color2){
   for (int i = y; i <= y+height; i++) { //from top row to bottom row
   
       float colMixRatio  = map(i, y, y+height, 0, 1); //increasing values between 0 & 1

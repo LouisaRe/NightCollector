@@ -1,22 +1,29 @@
 public class Star{
   
-  String   fileName;
-  PImage   star;
-  float    starWidth;
-  float    starPosX;
-  float    starPosY;
-  
+  private PImage   star;
+  private float    starWidth;
+  private float    starPosX;
+  private float    starPosY;
+  private float    starSpeed;
+   
   Star(String fileName, int width){
-    this.fileName     = fileName;
+    this.star         = loadImage(fileName);
     this.starWidth    = width;
     this.starPosX     = random(windowWidth);
     this.starPosY     = -270;
-    
-    setUp();
+    this.starSpeed    = 4 + random(3);
+  }
+  
+  void moveStar(){
+    starPosY = starPosY + starSpeed; //action: vertical movement
+    render(starPosX, starPosY);
   }
   
   
-  void render(float xPos, float yPos){
+  //private functions:
+  //############################################################
+
+  private void render(float xPos, float yPos){
     
     //prevent star from beeing beyond screen on left & right window side
     if(xPos <= starWidth/2){
@@ -31,13 +38,5 @@ public class Star{
     scale(1,1);
     image(star, xPos, yPos);
     pop();
-  }
-  
-  
-  //Private Functions:
-  //############################################################
-  
-  private void setUp(){
-    star = loadImage(fileName);
   }
 }
