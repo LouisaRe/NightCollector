@@ -16,6 +16,7 @@ int              starTimer;
 Basket basket;
 
 //mountain
+ArrayList<Mountain> mountains = new ArrayList<Mountain>();
 Mountain mountain;
 
 
@@ -25,8 +26,7 @@ void settings()
   size(windowWidth, windowHeight);  
   stars.add(           new Star  ("star.png"  ,  34));
   basket             = new Basket("basket.png", 100) ;
-  mountain           = new Mountain(  0, windowHeight,   0, 400, 
-                                    400, windowHeight, 300, 400);
+  createMountains();                
   millisBetweenStars = 1000 + random(1000);
   starTimer          = millis();
 }
@@ -36,7 +36,16 @@ void draw(){
   night();
   
   //mountain
-  mountain.moveMountain(sin(millis()/1000), -2 * sin(millis()/1000),0,0); //TODO: Connect movement to Audio
+  for(int i = 0; i < mountains.size(); i = i+1){
+    
+    float deltaXleft  =  0.5 * sin(millis()/((i+1)*1000)); //TODO: Connect movement to Audio
+    float deltaYleft  = -0.2 * sin(millis()/((i+1)*1000));
+    float deltaXright = -0.5 * sin(millis()/((i+1)*1000));
+    float deltaYright = -0.2 * sin(millis()/((i+1)*1000));
+    
+    mountains.get(i).moveMountain(deltaXleft, deltaYleft, deltaXright, deltaYright);
+  }
+  
   
   //stars
   if (millis() - starTimer >= millisBetweenStars) { //create a new star after a certain time
@@ -58,6 +67,21 @@ void draw(){
 
 private void createNewStar(){
   stars.add(new Star("star.png", 34));
+}
+
+private void createMountains(){
+  mountains.add(       new Mountain(   0, windowHeight,    0, 400, 
+                                     400, windowHeight,  300, 400));
+  mountains.add(       new Mountain( 400, windowHeight,  500, 400, 
+                                     800, windowHeight,  700, 450));
+  mountains.add(       new Mountain( 200, windowHeight,  300, 600, 
+                                     700, windowHeight,  600, 600));
+  mountains.add(       new Mountain( 100, windowHeight,  100, 500, 
+                                     550, windowHeight,  450, 500));
+  mountains.add(       new Mountain( 600, windowHeight,  900, 500, 
+                                    1500, windowHeight, 1200, 500));
+  mountains.add(       new Mountain( 550, windowHeight,  550, 600, 
+                                    1000, windowHeight,  950, 550));
 }
 
 private void verticalGradient(int x, int y, float width, float height, color color1, color color2){

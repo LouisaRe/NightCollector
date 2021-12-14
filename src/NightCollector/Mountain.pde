@@ -19,10 +19,10 @@ public class Mountain{
   }
   
   void moveMountain(float deltaXleft, float deltaYleft, float deltaXright, float deltaYright){
-      leftX1 += deltaXleft;
-      leftY1 += deltaYleft;
-      leftX1 += deltaXright;
-      leftY1 += deltaYright;
+      leftX1  += deltaXleft;
+      leftY1  += deltaYleft;
+      rightX1 += deltaXright;
+      rightY1 += deltaYright;
     
     render();
   }
@@ -53,8 +53,12 @@ public class Mountain{
       float x = b0*x0 + b1*x1 + b2*x2 + b3*x3;
       float y = b0*y0 + b1*y1 + b2*y2 + b3*y3;
       
-       //connect points with lines
-       circle(x,y,2); // render points
+      // render points
+      circle(x,y,2);
+      
+      //vertical colored lines
+      line(x,800, x, y);
+      stroke(102, 66, 77);
      }
   }
 }
