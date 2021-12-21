@@ -6,41 +6,32 @@ public class Star{
   private float    starPosX;
   private float    starPosY;
   private float    starSpeed;
-  private boolean  starWasRated;
+  private boolean  missedStar;
    
   Star(String fileName, int width){
     this.star         = loadImage(fileName);
     this.starWidth    = width;
     this.starPosX     = random(windowWidth-starWidth);
-    this.starHeight   =  270;
+    this.starHeight   = width * (270/33);
     this.starPosY     = -starHeight;
     this.starSpeed    = 4 + random(3);
-    this.starWasRated = false;
+    this.missedStar   = false;
   }
   
   void moveStar(){
     starPosY = starPosY + starSpeed; //action: vertical movement
-    render(starPosX, starPosY);
+    render();
   }
   
   
   //private functions:
   //############################################################
 
-  private void render(float xPos, float yPos){
-    
-    //prevent star from beeing beyond screen on left & right window side
-    if(xPos <= starWidth/2){
-      xPos = starWidth/2;
-    }
-    if(xPos >= width-(starWidth/2)){
-      xPos = width-(starWidth/2);
-    }
+  private void render(){
     
     push();
-    translate(-(starWidth/2),0);
     scale(1,1);
-    image(star, xPos, yPos);
+    image(star, starPosX, starPosY);
     pop();
   }
 }

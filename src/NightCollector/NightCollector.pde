@@ -8,9 +8,16 @@ color  bgColor2    = color(196, 177, 161);
 void   night()     {verticalGradient(0, 0, width, height, bgColor1, bgColor2);}
 
 //stars
-ArrayList<Star>  stars = new ArrayList<Star>();
+ArrayList<Star>  stars          = new ArrayList<Star>();
+ArrayList<Star>  collectedStars = new ArrayList<Star>();
 float            millisBetweenStars;
 int              starTimer;
+
+//bombs
+ArrayList<Bomb>  bombs          = new ArrayList<Bomb>();
+ArrayList<Bomb>  collectedBombs = new ArrayList<Bomb>();
+float            millisBetweenBombs;
+int              bombTimer;
 
 //basket
 Basket basket;
@@ -19,21 +26,27 @@ Basket basket;
 ArrayList<Mountain> mountains = new ArrayList<Mountain>();
 Mountain mountain;
 
-//water
+//ground
 Ground ground;
 
 //points
 int points = 0;
 
+//lives
+int lives;
+
 void settings()
 {
   size(windowWidth, windowHeight);  
+  lives              = 5;
   stars.add(           new Star  ("star.png"  ,  34));
   basket             = new Basket("basket.png", 100) ;
   ground             = new Ground();
   createMountains();                
-  millisBetweenStars = 1000 + random(1000);
+  millisBetweenStars =  1000 + random( 1000);
   starTimer          = millis();
+  millisBetweenBombs = 10000 + random(10000);
+  bombTimer          = millis();
 }
 
 void draw(){
@@ -61,15 +74,26 @@ void draw(){
     stars.get(i).moveStar();
   }
   
+  //bombs
+  if (millis() - bombTimer >= millisBetweenBombs) { //create a new bomb after a certain time
+    createNewBomb();
+    millisBetweenBombs = 10000 + random(10000);
+    bombTimer = millis();
+  }
+  for(int i = 0; i < bombs.size(); i = i+1){ //existing stars
+    bombs.get(i).moveBomb();
+  }
+  
   //ground
   ground.render();
   
   //basket
   basket.moveBasket();
   
-  //points
+  //points & lives
   updatePoints();
-  text("Sternenstand " + str(points), width-200, 100);
+  updateLives();
+  text("Sternenstand: " + str(points) + "\n" + "Leben: " + str(lives) , width-200, 100);
 }
 
 
@@ -80,16 +104,46 @@ private void updatePoints(){
   for(int i = 0; i < stars.size(); i = i+1){ //all stars
   
     if(stars.get(i).starPosY + stars.get(i).starHeight >= basket.basketPosY &&
-       stars.get(i).starPosY + stars.get(i).starHeight <= height){  //y-position
+       stars.get(i).starPosY + stars.get(i).starHeight <= height){  //y-position >= basket
        
        if(stars.get(i).starPosX                          >= basket.basketPosX &&
-          stars.get(i).starPosX + stars.get(i).starWidth <= basket.basketPosX + basket.basketWidth){ //x-position
+          stars.get(i).starPosX + stars.get(i).starWidth <= basket.basketPosX + basket.basketWidth){ //same x-position as basket
          
-           if(!stars.get(i).starWasRated){ //star was not rated yet
+           if(!stars.get(i).missedStar){ //star was not rated yet
              points = points + 1;
+             collectedStars.add(stars.get(i));
+             stars.remove(i);
            }
            
-           stars.get(i).starWasRated = true;
+       }else{
+         stars.get(i).missedStar = true;
+       }
+    }
+    
+  }
+}
+
+private void updateLives(){
+  for(int i = 0; i < bombs.size(); i = i+1){ //all stars
+  
+    if(bombs.get(i).bombPosY + bombs.get(i).bombHeight >= basket.basketPosY &&
+       bombs.get(i).bombPosY + bombs.get(i).bombHeight <= height){  //y-position >= basket
+       
+       if(bombs.get(i).bombPosX                          >= basket.basketPosX &&
+          bombs.get(i).bombPosX + bombs.get(i).bombWidth <= basket.basketPosX + basket.basketWidth){ //same x-position as basket
+         
+           if(!bombs.get(i).missedBomb){ //bomb was not rated yet
+             lives = lives - 1;
+             collectedBombs.add(bombs.get(i));
+             bombs.remove(i);
+             
+             if(lives == 0){
+               // todo stop all and show game over text
+             }
+           }
+           
+       }else{
+         bombs.get(i).missedBomb = true;
        }
     }
     
@@ -97,7 +151,11 @@ private void updatePoints(){
 }
 
 private void createNewStar(){
-  stars.add(new Star("star.png", 34));
+  stars.add(new Star("star.png", 33));
+}
+
+private void createNewBomb(){
+  bombs.add(new Bomb("bomb.png", 27));
 }
 
 private void createMountains(){
