@@ -2,16 +2,20 @@ public class Star{
   
   private PImage   star;
   private float    starWidth;
+  private float    starHeight;
   private float    starPosX;
   private float    starPosY;
   private float    starSpeed;
+  private boolean  starWasRated;
    
   Star(String fileName, int width){
     this.star         = loadImage(fileName);
     this.starWidth    = width;
-    this.starPosX     = random(windowWidth);
-    this.starPosY     = -270;
+    this.starPosX     = random(windowWidth-starWidth);
+    this.starHeight   =  270;
+    this.starPosY     = -starHeight;
     this.starSpeed    = 4 + random(3);
+    this.starWasRated = false;
   }
   
   void moveStar(){

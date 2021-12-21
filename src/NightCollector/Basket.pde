@@ -5,6 +5,7 @@ public class Basket{
   private float  basketHeight;
   private float  heightRatio;
   private float  basketSpeed;
+  private float  mousePosX;
   private float  basketPosX;
   private float  basketPosY;
   
@@ -15,31 +16,35 @@ public class Basket{
     this.basketHeight   = basketWidth * heightRatio;
     this.heightRatio    = 0.4;
     this.basketSpeed    = 0.1;
-    this.basketPosX     = 0;
+    this.mousePosX      = 0;
+    this.basketPosX     = mousePosX - (basketWidth/2);
     this.basketPosY     = 700;
   }
   
   void moveBasket(){
-      basketPosX = basketPosX+(mouseX-basketPosX)*basketSpeed; //action: roll to mouseX-Position
-      render(basketPosX, basketPosY);
+      mousePosX = mousePosX+(mouseX-mousePosX)*basketSpeed; //action: roll to mouseX-Position
+      
+      render();
   }
   
   
   //private functions:
   //############################################################
     
-  private void render(float xPos, float yPos){
+  private void render(){
+       
+    basketPosX = mousePosX-(basketWidth/2);
     
     //prevent basket from running beyond screen
-    if(xPos <= basketWidth/2){
-      xPos = basketWidth/2;
+    if(mousePosX <= basketWidth/2){
+      basketPosX = 0;
     }
-    if(xPos >= width-(basketWidth/2)){
-      xPos = width-(basketWidth/2);
+    if(mousePosX >= width-(basketWidth/2)){
+      basketPosX = width-basketWidth;
     }
     
     push();
-    translate(xPos-(basketWidth/2),yPos);
+    translate(basketPosX, basketPosY);
     scale(1,1);
     image(basket, 0, 0);
     pop();

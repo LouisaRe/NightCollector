@@ -19,13 +19,18 @@ Basket basket;
 ArrayList<Mountain> mountains = new ArrayList<Mountain>();
 Mountain mountain;
 
+//water
+Ground ground;
 
+//points
+int points = 0;
 
 void settings()
 {
   size(windowWidth, windowHeight);  
   stars.add(           new Star  ("star.png"  ,  34));
   basket             = new Basket("basket.png", 100) ;
+  ground             = new Ground();
   createMountains();                
   millisBetweenStars = 1000 + random(1000);
   starTimer          = millis();
@@ -35,7 +40,7 @@ void draw(){
   //background
   night();
   
-  //mountain
+  //mountains
   for(int i = 0; i < mountains.size(); i = i+1){
     
     float deltaXleft  =  0.5 * sin(millis()/((i+1)*1000)); //TODO: Connect movement to Audio
@@ -45,7 +50,6 @@ void draw(){
     
     mountains.get(i).moveMountain(deltaXleft, deltaYleft, deltaXright, deltaYright);
   }
-  
   
   //stars
   if (millis() - starTimer >= millisBetweenStars) { //create a new star after a certain time
@@ -57,13 +61,40 @@ void draw(){
     stars.get(i).moveStar();
   }
   
+  //ground
+  ground.render();
+  
   //basket
   basket.moveBasket();
+  
+  //points
+  updatePoints();
+  text("Sternenstand " + str(points), width-200, 100);
 }
 
 
 //helper functions:
 //############################################################
+
+private void updatePoints(){
+  for(int i = 0; i < stars.size(); i = i+1){ //all stars
+  
+    if(stars.get(i).starPosY + stars.get(i).starHeight >= basket.basketPosY &&
+       stars.get(i).starPosY + stars.get(i).starHeight <= height){  //y-position
+       
+       if(stars.get(i).starPosX                          >= basket.basketPosX &&
+          stars.get(i).starPosX + stars.get(i).starWidth <= basket.basketPosX + basket.basketWidth){ //x-position
+         
+           if(!stars.get(i).starWasRated){ //star was not rated yet
+             points = points + 1;
+           }
+           
+           stars.get(i).starWasRated = true;
+       }
+    }
+    
+  }
+}
 
 private void createNewStar(){
   stars.add(new Star("star.png", 34));

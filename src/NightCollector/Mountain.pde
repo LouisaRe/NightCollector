@@ -36,7 +36,7 @@ public class Mountain{
     pop();
   }
   
-  void myBezier(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3){
+  private void myBezier(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3){
     int steps = 40; // Increase value to increase discretization 
     int drawSteps = steps;
     //drawSteps = (int)((sin(millis()/100.0f)*0.5f+0.5f)*steps); //for animation
