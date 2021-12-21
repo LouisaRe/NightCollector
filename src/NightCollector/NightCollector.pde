@@ -19,6 +19,9 @@ ArrayList<Bomb>  collectedBombs = new ArrayList<Bomb>();
 float            millisBetweenBombs;
 int              bombTimer;
 
+//clouds
+ArrayList<Cloud> clouds = new ArrayList<Cloud>();
+
 //basket
 Basket basket;
 
@@ -29,29 +32,33 @@ Mountain mountain;
 //ground
 Ground ground;
 
-//points
-int points = 0;
-
-//lives
+//points, lives
+int points   = 0;
 int lives;
 
 void settings()
 {
   size(windowWidth, windowHeight);  
   lives              = 5;
-  stars.add(           new Star  ("star.png"  ,  34));
   basket             = new Basket("basket.png", 100) ;
   ground             = new Ground();
-  createMountains();                
-  millisBetweenStars =  1000 + random( 1000);
+  createNewStar();
+  createNewCloud();
+  createMountains();
   starTimer          = millis();
-  millisBetweenBombs = 10000 + random(10000);
   bombTimer          = millis();
+  millisBetweenStars =  1000 + random( 1000);
+  millisBetweenBombs = 10000 + random(10000);
 }
 
+
+
 void draw(){
+  float playTime = millis()*0.001f; //scaled time [ms]
+  
   //background
   night();
+  
   
   //mountains
   for(int i = 0; i < mountains.size(); i = i+1){
@@ -90,15 +97,60 @@ void draw(){
   //basket
   basket.moveBasket();
   
+  //clouds
+  if (playTime % 5 <= 0.01) { //create a new cloud after a certain time
+    createNewCloud();
+  }
+  for(int i = 0; i < clouds.size(); i = i+1){ //existing clouds
+    clouds.get(i).moveCloud(playTime, i%3);
+  }
+
   //points & lives
   updatePoints();
   updateLives();
-  text("Sternenstand: " + str(points) + "\n" + "Leben: " + str(lives) , width-200, 100);
+  text("Zeit: " + int(playTime) + " s" + "\n" + "Sternenstand: " + str(points) + "\n" + "Leben: " + str(lives) , width-200, 100);
 }
 
 
 //helper functions:
 //############################################################
+
+private void createNewStar(){
+  stars.add(new Star("star.png", 33));
+}
+
+private void createNewBomb(){
+  bombs.add(new Bomb("bomb.png", 27));
+}
+
+private void createNewCloud(){
+  clouds.add(new Cloud("cloud.png", 392, random(500)));
+}
+
+private void createMountains(){
+  mountains.add(       new Mountain(   0, windowHeight,    0, 400, 
+                                     400, windowHeight,  300, 400));
+  mountains.add(       new Mountain( 400, windowHeight,  500, 400, 
+                                     800, windowHeight,  700, 450));
+  mountains.add(       new Mountain( 200, windowHeight,  300, 600, 
+                                     700, windowHeight,  600, 600));
+  mountains.add(       new Mountain( 100, windowHeight,  100, 500, 
+                                     550, windowHeight,  450, 500));
+  mountains.add(       new Mountain( 600, windowHeight,  900, 500, 
+                                    1500, windowHeight, 1200, 500));
+  mountains.add(       new Mountain( 550, windowHeight,  550, 600, 
+                                    1000, windowHeight,  950, 550));
+}
+
+private void verticalGradient(int x, int y, float width, float height, color color1, color color2){
+  for (int i = y; i <= y+height; i++) { //from top row to bottom row
+  
+      float colMixRatio  = map(i, y, y+height, 0, 1); //increasing values between 0 & 1
+      color mixedCol     = lerpColor(color1, color2, colMixRatio);
+      stroke(mixedCol);
+      line(x, i, x+width, i);
+    }
+}
 
 private void updatePoints(){
   for(int i = 0; i < stars.size(); i = i+1){ //all stars
@@ -148,37 +200,4 @@ private void updateLives(){
     }
     
   }
-}
-
-private void createNewStar(){
-  stars.add(new Star("star.png", 33));
-}
-
-private void createNewBomb(){
-  bombs.add(new Bomb("bomb.png", 27));
-}
-
-private void createMountains(){
-  mountains.add(       new Mountain(   0, windowHeight,    0, 400, 
-                                     400, windowHeight,  300, 400));
-  mountains.add(       new Mountain( 400, windowHeight,  500, 400, 
-                                     800, windowHeight,  700, 450));
-  mountains.add(       new Mountain( 200, windowHeight,  300, 600, 
-                                     700, windowHeight,  600, 600));
-  mountains.add(       new Mountain( 100, windowHeight,  100, 500, 
-                                     550, windowHeight,  450, 500));
-  mountains.add(       new Mountain( 600, windowHeight,  900, 500, 
-                                    1500, windowHeight, 1200, 500));
-  mountains.add(       new Mountain( 550, windowHeight,  550, 600, 
-                                    1000, windowHeight,  950, 550));
-}
-
-private void verticalGradient(int x, int y, float width, float height, color color1, color color2){
-  for (int i = y; i <= y+height; i++) { //from top row to bottom row
-  
-      float colMixRatio  = map(i, y, y+height, 0, 1); //increasing values between 0 & 1
-      color mixedCol     = lerpColor(color1, color2, colMixRatio);
-      stroke(mixedCol);
-      line(x, i, x+width, i);
-    }
 }
