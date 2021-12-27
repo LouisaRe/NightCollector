@@ -1,3 +1,5 @@
+import processing.sound.*;
+
 //window
 int windowWidth    = 1000;
 int windowHeight   =  800;
@@ -36,6 +38,15 @@ Ground ground;
 int points   = 0;
 int lives;
 
+// time
+int seconds = 0;
+boolean inNewSecond = false;
+
+//sounds
+SoundPlayer soundPlayer;
+int secondsUntilSpeedIncrease = 5;
+
+
 void settings()
 {
   size(windowWidth, windowHeight);  
@@ -49,12 +60,26 @@ void settings()
   bombTimer          = millis();
   millisBetweenStars =  1000 + random( 1000);
   millisBetweenBombs = 10000 + random(10000);
+  
+  soundPlayer = new SoundPlayer();
+  // Execute method 'loadMusic' in a separate thread
+  // according to: https://processing.org/reference/thread_.html
+  // Because this takes some seconds
+  thread("loadMusicAsync");
 }
 
 
 
 void draw(){
   float playTime = millis()*0.001f; //scaled time [ms]
+  
+  // TODO: maybe replace playTime completely by seconds:
+  // Update seconds ONLY once per second:
+  if ((int) playTime > seconds) {
+      seconds++;
+      inNewSecond = true;
+  }
+
   
   //background
   night();
@@ -108,7 +133,13 @@ void draw(){
   //points & lives
   updatePoints();
   updateLives();
-  text("Zeit: " + int(playTime) + " s" + "\n" + "Sternenstand: " + str(points) + "\n" + "Leben: " + str(lives) , width-200, 100);
+  text("Zeit: " + seconds + " s" + "\n" + "Sternenstand: " + str(points) + "\n" + "Leben: " + str(lives) , width-200, 100);
+  
+  //
+  updateMusic();  
+  
+  // cleanup at end of draw:
+  inNewSecond = false;
 }
 
 
@@ -198,6 +229,27 @@ private void updateLives(){
          bombs.get(i).missedBomb = true;
        }
     }
-    
   }
+}
+
+private void updateMusic() {
+  if(soundPlayer.music == null) {
+    textSize(18);
+    text("game-music is loading (" + seconds + ")...", 20, windowHeight - 20); 
+  } else {
+    if (inNewSecond 
+        && seconds > 11
+        && seconds % secondsUntilSpeedIncrease == 0) {
+          soundPlayer.increaseMusicSpeed();
+        }
+  }
+}
+
+
+// will run on a separate thread -- called by thread("loadMusicAsync");
+void loadMusicAsync() {
+  soundPlayer.music = new SoundFile(this, soundPlayer.musicFileName);
+  soundPlayer.music.loop();
+  soundPlayer.setMusicSpeed();
+  soundPlayer.setMusicVolume();
 }
