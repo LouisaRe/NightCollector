@@ -66,6 +66,8 @@ void settings()
   // according to: https://processing.org/reference/thread_.html
   // Because this takes some seconds
   thread("loadMusicAsync");
+  
+  loadSounds(); // only small files, don't load asynchroniously
 }
 
 
@@ -193,6 +195,7 @@ private void updatePoints(){
           stars.get(i).starPosX + stars.get(i).starWidth <= basket.basketPosX + basket.basketWidth){ //same x-position as basket
          
            if(!stars.get(i).missedStar){ //star was not rated yet
+             soundPlayer.soundCollect.play();
              points = points + 1;
              collectedStars.add(stars.get(i));
              stars.remove(i);
@@ -216,6 +219,7 @@ private void updateLives(){
           bombs.get(i).bombPosX + bombs.get(i).bombWidth <= basket.basketPosX + basket.basketWidth){ //same x-position as basket
          
            if(!bombs.get(i).missedBomb){ //bomb was not rated yet
+             soundPlayer.soundBomb.play();
              lives = lives - 1;
              collectedBombs.add(bombs.get(i));
              bombs.remove(i);
@@ -252,4 +256,9 @@ void loadMusicAsync() {
   soundPlayer.music.loop();
   soundPlayer.setMusicSpeed();
   soundPlayer.setMusicVolume();
+}
+
+void loadSounds() {
+  soundPlayer.soundCollect = new SoundFile(this, soundPlayer.soundCollectName); 
+  soundPlayer.soundBomb = new SoundFile(this, soundPlayer.soundBombName); 
 }
