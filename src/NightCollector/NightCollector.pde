@@ -15,6 +15,8 @@ ArrayList<Star>  collectedStars = new ArrayList<Star>();
 float            millisBetweenStars;
 int              starTimer;
 
+PowerStar       powerStar;
+
 //bombs
 ArrayList<Bomb>  bombs          = new ArrayList<Bomb>();
 ArrayList<Bomb>  collectedBombs = new ArrayList<Bomb>();
@@ -54,6 +56,7 @@ void settings()
   basket             = new Basket("basket.png", 100) ;
   ground             = new Ground();
   createNewStar();
+  createNewPowerStar();
   createNewCloud();
   createMountains();
   starTimer          = millis();
@@ -108,6 +111,9 @@ void draw(){
     stars.get(i).moveStar();
   }
   
+  //power star
+  powerStar.movePowerStar();
+  
   //bombs
   if (millis() - bombTimer >= millisBetweenBombs) { //create a new bomb after a certain time
     createNewBomb();
@@ -150,6 +156,10 @@ void draw(){
 
 private void createNewStar(){
   stars.add(new Star("star.png", 33));
+}
+
+private void createNewPowerStar(){
+  powerStar = new PowerStar("powerStarTail.png", 33);
 }
 
 private void createNewBomb(){
