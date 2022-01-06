@@ -100,7 +100,7 @@ You can nearly not loose the game, since you can evade the bomb very easily.
 #### ToDos for Version:
 
 - [ ]  Change some core game logic parts
-- [ ]  Create graphic-asset for life power-up
+- [X]  Create graphic-asset for life power-up
 - [ ]  Find/Create sound-asset for life power-up
 - [ ] Define and tweak the difficulty parameters of the game:
   - [ ]  Target game duration: 1 to 5 minutes?
