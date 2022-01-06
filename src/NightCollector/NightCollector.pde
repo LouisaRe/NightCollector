@@ -4,6 +4,11 @@ import processing.sound.*;
 int windowWidth      = 1000;
 int windowHeight     =  800;
 
+//screen
+Screen        currentScreen = Screen.START_SCREEN;
+DrawFunctions drawFuncs     = new DrawFunctions();
+boolean       clicked       = false;
+
 //colors
 color  bgColor1      = color(  7,  22,  62);
 color  bgColor2      = color(196, 177, 161);
@@ -41,7 +46,7 @@ Ground ground;
 int points   = 0;
 int lives;
 
-// time
+//time
 int seconds = 0;
 boolean inNewSecond = false;
 
@@ -77,90 +82,25 @@ void settings()
 }
 
 
-
 void draw(){
-  float playTime = millis()*0.001f; //scaled time [ms]
   
-  // TODO: maybe replace playTime completely by seconds:
-  // Update seconds ONLY once per second:
-  if ((int) playTime > seconds) {
-      seconds++;
-      inNewSecond = true;
-  }
-
-  
-  //background
-  night();
-  
-  
-  //mountains
-  for(int i = 0; i < mountains.size(); i = i+1){
-    
-    float deltaXleft  =  0.5 * sin(millis()/((i+1)*1000)); //TODO: Connect movement to Audio
-    float deltaYleft  = -0.2 * sin(millis()/((i+1)*1000));
-    float deltaXright = -0.5 * sin(millis()/((i+1)*1000));
-    float deltaYright = -0.2 * sin(millis()/((i+1)*1000));
-    
-    mountains.get(i).moveMountain(deltaXleft, deltaYleft, deltaXright, deltaYright);
+  switch(currentScreen){
+    case START_SCREEN :
+      drawFuncs.drawStartScreen();
+      break;
+    case GAME_SCREEN :
+      drawFuncs.drawGameScreen();
+      break;
+    case END_SCREEN :
+      drawFuncs.drawEndScreen();
+      break;
   }
   
-  //stars
-  if (millis() - starTimer >= millisBetweenStars) { //create a new star after a certain time
-    createNewStar();
-    millisBetweenStars = 1000 + random(1000);
-    starTimer = millis();
-  }
-  for(int i = 0; i < stars.size(); i = i+1){ //existing stars
-    stars.get(i).moveStar();
-  }
-  
-  //power stars
-  if (millis() - powerStarTimer >= millisBetweenPowerStars) { //create a new power star after a certain time
-    createNewPowerStar();
-    millisBetweenPowerStars = 8000 + random(2000);
-    powerStarTimer = millis();
-  }
-  for(int i = 0; i < powerStars.size(); i = i+1){ //existing stars
-    powerStars.get(i).movePowerStar();
-  }
-  
-  //bombs
-  if (millis() - bombTimer >= millisBetweenBombs) { //create a new bomb after a certain time
-    createNewBomb();
-    millisBetweenBombs = 10000 + random(10000);
-    bombTimer = millis();
-  }
-  for(int i = 0; i < bombs.size(); i = i+1){ //existing stars
-    bombs.get(i).moveBomb();
-  }
-  
-  //ground
-  ground.render();
-  
-  //basket
-  basket.moveBasket();
-  
-  //clouds
-  if (playTime % 5 <= 0.01) { //create a new cloud after a certain time
-    createNewCloud();
-  }
-  for(int i = 0; i < clouds.size(); i = i+1){ //existing clouds
-    clouds.get(i).moveCloud(playTime, i%3);
-  }
-
-  //points & lives
-  updateWonLives();             // PowerStars
-  updatePointsAndMissedLives(); //Stars
-  checkGameOver();              //Bombs
-  text("Zeit: " + seconds + " s" + "\n" + "Sternenstand: " + str(points) + "\n" + "Leben: " + str(lives) , width-200, 100);
-  
-  //
-  updateMusic();  
-  
-  // cleanup at end of draw:
-  inNewSecond = false;
 }
 
+void mouseReleased(){
+  clicked = ! clicked;
+}
 
 //helper functions:
 //############################################################
@@ -229,7 +169,7 @@ private void updatePointsAndMissedLives(){
            lives = lives - 1; //missed (correct y / incorrext x)
            stars.get(i).missedCollision = true;
            if(lives <= 0){
-             //TODO:  stop all and show game over text
+             currentScreen = Screen.END_SCREEN; //game over
            }
          }
        }
@@ -254,7 +194,7 @@ private void updateWonLives(){
           }
            
        }else{
-         stars.get(i).missedCollision = true;  //missed (correct y / incorrext x)
+         powerStars.get(i).missedCollision = true;  //missed (correct y / incorrext x)
        }
     }
   }
@@ -269,11 +209,13 @@ private void checkGameOver(){
        if(bombs.get(i).posX                             >= basket.posX &&
           bombs.get(i).posX + bombs.get(i).elementWidth <= basket.posX + basket.elementWidth){ //same x-position as basket
          
-             soundPlayer.soundBomb.play();
-             //TODO:  stop all and show game over text
-       
+         if(!stars.get(i).missedCollision){
+           
+             soundPlayer.soundBomb.play(); //collision (correct x/y)
+             currentScreen = Screen.END_SCREEN; //gmae over
+         }
        }else{
-         bombs.remove(i);
+         bombs.get(i).missedCollision = true; //missed (correct y / incorrext x)
        }
     }
   }
@@ -291,7 +233,6 @@ private void updateMusic() {
         }
   }
 }
-
 
 // will run on a separate thread -- called by thread("loadMusicAsync");
 void loadMusicAsync() {
