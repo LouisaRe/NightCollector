@@ -5,15 +5,7 @@ class DrawFunctions{
     night();
     
     //mountains
-    for(int i = 0; i < mountains.size(); i = i+1){
-      
-      float deltaXleft  =  0.5 * sin(millis()/((i+1)*1000)); //TODO: Connect movement to Audio
-      float deltaYleft  = -0.2 * sin(millis()/((i+1)*1000));
-      float deltaXright = -0.5 * sin(millis()/((i+1)*1000));
-      float deltaYright = -0.2 * sin(millis()/((i+1)*1000));
-      
-      mountains.get(i).moveMountain(deltaXleft, deltaYleft, deltaXright, deltaYright);
-    }
+    drawMountains();
     
     //ground
     ground.render();
@@ -25,31 +17,19 @@ class DrawFunctions{
   //############################################################
   
   void drawGameScreen(){
-    
-    float playTime = millis()*0.001f; //scaled time [ms]
   
-    // TODO: maybe replace playTime completely by seconds:
+    playTime          = millis()*0.001f;
     // Update seconds ONLY once per second:
     if ((int) playTime > seconds) {
         seconds++;
         inNewSecond = true;
     }
   
-    
     //background
     night();
     
-    
     //mountains
-    for(int i = 0; i < mountains.size(); i = i+1){
-      
-      float deltaXleft  =  0.5 * sin(millis()/((i+1)*1000)); //TODO: Connect movement to Audio
-      float deltaYleft  = -0.2 * sin(millis()/((i+1)*1000));
-      float deltaXright = -0.5 * sin(millis()/((i+1)*1000));
-      float deltaYright = -0.2 * sin(millis()/((i+1)*1000));
-      
-      mountains.get(i).moveMountain(deltaXleft, deltaYleft, deltaXright, deltaYright);
-    }
+    drawMountains();
     
     //stars
     if (millis() - starTimer >= millisBetweenStars) { //create a new star after a certain time
@@ -99,9 +79,10 @@ class DrawFunctions{
     updateWonLives();             // PowerStars
     updatePointsAndMissedLives(); //Stars
     checkGameOver();              //Bombs
-    text("Zeit: " + seconds + " s" + "\n" + "Sternenstand: " + str(points) + "\n" + "Leben: " + str(lives) , width-200, 100);
+    progressElements.showLives();
+    progressElements.showTime();
     
-    //
+    //music
     updateMusic();  
     
     // cleanup at end of draw:
@@ -115,15 +96,30 @@ class DrawFunctions{
     night();
     
     //mountains
-    
+    drawMountains();
     
     //ground
     ground.render();
+    
+    //rating
+    updateRating();
+    progressElements.showRatingStars();
+    
+    //button
+    drawButton("try again", Screen.GAME_SCREEN);
   }
 }
 
 
-
+private void night(){
+  //sky
+  verticalGradient(0, 0, width, height, bgColor1, bgColor2);
+  
+  //moon
+  int moonWidth = 150;
+  fill(#ffffff);
+  circle(width-moonWidth, moonWidth, moonWidth);
+}
 
 private void drawButton(String text, Screen nextScreen){
  
@@ -137,6 +133,9 @@ private void drawButton(String text, Screen nextScreen){
   //rect
   if (mouseX>x && mouseY>y && mouseX<x+bWidth && mouseY<y+bHeight) { //hover
     if(clicked){
+      if(nextScreen == Screen.GAME_SCREEN){
+        reset();
+      }
       currentScreen = nextScreen;
     }
     fill(#BE7EA2);

@@ -29,7 +29,6 @@ public class Bomb extends CollisionElement{
   private void render(float xPos, float yPos){
     
     push();
-    scale(1,1);
     image(bomb, xPos, yPos);
     pop();
   }

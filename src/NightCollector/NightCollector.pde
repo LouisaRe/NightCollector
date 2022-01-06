@@ -12,20 +12,19 @@ boolean       clicked       = false;
 //colors
 color  bgColor1      = color(  7,  22,  62);
 color  bgColor2      = color(196, 177, 161);
-void   night()       {verticalGradient(0, 0, width, height, bgColor1, bgColor2);}
 
 //stars
-ArrayList<Star>      stars          = new ArrayList<Star>();
-ArrayList<Star>      collectedStars = new ArrayList<Star>();
+ArrayList<Star>      stars;
+ArrayList<Star>      collectedStars;
 float                millisBetweenStars;
 int                  starTimer;
 
-ArrayList<PowerStar> powerStars     = new ArrayList<PowerStar>();
+ArrayList<PowerStar> powerStars;
 float                millisBetweenPowerStars;
 int                  powerStarTimer;
 
 //bombs
-ArrayList<Bomb>      bombs          = new ArrayList<Bomb>();
+ArrayList<Bomb>      bombs;
 float                millisBetweenBombs;
 int                  bombTimer;
 
@@ -42,12 +41,14 @@ Mountain mountain;
 //ground
 Ground ground;
 
-//points, lives
-int points   = 0;
+//rating, lives
 int lives;
+int rating;
+ProgressElements progressElements;
 
 //time
-int seconds = 0;
+float   playTime;
+int     seconds;
 boolean inNewSecond = false;
 
 //sounds
@@ -57,8 +58,14 @@ int secondsUntilSpeedIncrease = 5;
 
 void settings()
 {
+  soundPlayer        = new SoundPlayer();
+  thread("loadMusicAsync"); // Execute method 'loadMusic' in a separate thread according to: https://processing.org/reference/thread_.html. Because this takes some seconds
+  loadSounds(); // only small files, don't load asynchroniously
+  
+  reset();
+  
   size(windowWidth, windowHeight);  
-  lives              = 5;
+  progressElements   = new ProgressElements("life.png", 20, "ratingStarUnfilled.png", "ratingStarFilled.png", 150, "stopWatch.png", 16.67);
   basket             = new Basket("basket.png", 100) ;
   ground             = new Ground();
   createNewStar();
@@ -70,15 +77,18 @@ void settings()
   millisBetweenStars =  1000 + random( 1000);
   millisBetweenPowerStars = 4000 + random(1000);
   millisBetweenBombs = 10000 + random(10000);
+}
 
-  
-  soundPlayer = new SoundPlayer();
-  // Execute method 'loadMusic' in a separate thread
-  // according to: https://processing.org/reference/thread_.html
-  // Because this takes some seconds
-  thread("loadMusicAsync");
-  
-  loadSounds(); // only small files, don't load asynchroniously
+private void reset(){
+  lives             = 5;
+  rating            = 0;
+  seconds           = 0;
+  playTime          = millis()*0.001f; //scaled time [ms] // TODO: maybe replace playTime completely by seconds:
+  soundPlayer.speed = 0.8;
+  stars             = new ArrayList<Star>();
+  collectedStars    = new ArrayList<Star>();
+  powerStars        = new ArrayList<PowerStar>();
+  bombs             = new ArrayList<Bomb>();
 }
 
 
@@ -99,7 +109,11 @@ void draw(){
 }
 
 void mouseReleased(){
-  clicked = ! clicked;
+  clicked = false;
+}
+
+void mousePressed(){
+  clicked = true;
 }
 
 //helper functions:
@@ -158,7 +172,6 @@ private void updatePointsAndMissedLives(){
          if(!stars.get(i).missedCollision){
            
            soundPlayer.soundCollect.play(); //collision (correct x/y)
-           points = points + 1;
            collectedStars.add(stars.get(i));
            stars.remove(i);
          }
@@ -209,7 +222,7 @@ private void checkGameOver(){
        if(bombs.get(i).posX                             >= basket.posX &&
           bombs.get(i).posX + bombs.get(i).elementWidth <= basket.posX + basket.elementWidth){ //same x-position as basket
          
-         if(!stars.get(i).missedCollision){
+         if(!bombs.get(i).missedCollision){
            
              soundPlayer.soundBomb.play(); //collision (correct x/y)
              currentScreen = Screen.END_SCREEN; //gmae over
@@ -219,6 +232,23 @@ private void checkGameOver(){
        }
     }
   }
+}
+
+private void updateRating(){
+  
+  if(seconds < 60){
+    rating = 0;
+  }
+  else if(seconds < 120){
+    rating = 1;
+  }
+  else if(seconds < 180){
+    rating = 2;
+  }
+  else{
+    rating = 3;
+  }
+  
 }
 
 private void updateMusic() {

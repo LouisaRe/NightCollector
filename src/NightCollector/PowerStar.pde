@@ -31,7 +31,6 @@ public class PowerStar extends CollisionElement {
   private void render(){
     
     push();
-    scale(1,1);
     image(tail, posX, posY);
     randomColoredCircle(int(posX - 0.5 + (elementWidth/2)), 
                         int(posY + tailHeight), 

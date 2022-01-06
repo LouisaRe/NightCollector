@@ -3,7 +3,7 @@ public class SoundPlayer {
   // For music
   SoundFile music; // is null until fully loaded
   String musicFileName = "sound-ararat-deep.mp3"; // Music from a band of mine: https://andreasmusic.ch/ararat-quintet
-  float speed = 0.8;
+  float speed;
   float volume = 0.3;
   
   // For game sounds

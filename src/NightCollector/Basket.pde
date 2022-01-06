@@ -45,7 +45,6 @@ public class Basket extends CollisionElement{
     
     push();
     translate(posX, posY);
-    scale(1,1);
     image(basket, 0, 0);
     pop();
   }

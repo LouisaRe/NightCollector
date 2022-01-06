@@ -41,7 +41,6 @@ public class Cloud{
   private void render(){
     
     push();
-    scale(1,1);
     image(cloud, cloudPosX, cloudPosY);
     pop();
   }

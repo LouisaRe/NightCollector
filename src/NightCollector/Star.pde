@@ -29,7 +29,6 @@ public class Star extends CollisionElement{
   private void render(){
     
     push();
-    scale(1,1);
     image(star, posX, posY);
     pop();
   }
