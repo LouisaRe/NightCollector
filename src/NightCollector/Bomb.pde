@@ -1,26 +1,25 @@
-public class Bomb{
+public class Bomb extends CollisionElement{
   
-  private PImage   bomb;
-  private float    bombWidth;
-  private float    bombHeight;
-  private float    bombPosX;
-  private float    bombPosY;
-  private float    bombSpeed;
-  private boolean  missedBomb;
+  private PImage  bomb;
+  private boolean missedCollision;
    
   Bomb(String fileName, int width){
-    this.bomb         = loadImage(fileName);
-    this.bombWidth    = width;
-    this.bombPosX     = random(windowWidth-bombWidth);
-    this.bombHeight   = width * (270/27);
-    this.bombPosY     = -bombHeight;
-    this.bombSpeed    = 8 + random(3);
-    this.missedBomb   = false;
+    
+    this.elementWidth    = width;
+    this.elementHeight   = width * (270/27);
+    
+    this.posX            = random(windowWidth-elementWidth);
+    this.posY            = - elementHeight;  
+    
+    this.speed           = 8 + random(3);
+    
+    this.bomb            = loadImage(fileName);
+    this.missedCollision = false;
   }
   
   void moveBomb(){
-    bombPosY = bombPosY + bombSpeed; //action: vertical movement
-    render(bombPosX, bombPosY);
+    posY = posY + speed; //action: vertical movement
+    render(posX, posY);
   }
   
   

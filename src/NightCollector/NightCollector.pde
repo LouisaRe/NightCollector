@@ -1,27 +1,28 @@
 import processing.sound.*;
 
 //window
-int windowWidth    = 1000;
-int windowHeight   =  800;
+int windowWidth      = 1000;
+int windowHeight     =  800;
 
 //colors
-color  bgColor1    = color(  7,  22,  62);
-color  bgColor2    = color(196, 177, 161);
-void   night()     {verticalGradient(0, 0, width, height, bgColor1, bgColor2);}
+color  bgColor1      = color(  7,  22,  62);
+color  bgColor2      = color(196, 177, 161);
+void   night()       {verticalGradient(0, 0, width, height, bgColor1, bgColor2);}
 
 //stars
-ArrayList<Star>  stars          = new ArrayList<Star>();
-ArrayList<Star>  collectedStars = new ArrayList<Star>();
-float            millisBetweenStars;
-int              starTimer;
+ArrayList<Star>      stars          = new ArrayList<Star>();
+ArrayList<Star>      collectedStars = new ArrayList<Star>();
+float                millisBetweenStars;
+int                  starTimer;
 
-PowerStar       powerStar;
+ArrayList<PowerStar> powerStars     = new ArrayList<PowerStar>();
+float                millisBetweenPowerStars;
+int                  powerStarTimer;
 
 //bombs
-ArrayList<Bomb>  bombs          = new ArrayList<Bomb>();
-ArrayList<Bomb>  collectedBombs = new ArrayList<Bomb>();
-float            millisBetweenBombs;
-int              bombTimer;
+ArrayList<Bomb>      bombs          = new ArrayList<Bomb>();
+float                millisBetweenBombs;
+int                  bombTimer;
 
 //clouds
 ArrayList<Cloud> clouds = new ArrayList<Cloud>();
@@ -56,13 +57,15 @@ void settings()
   basket             = new Basket("basket.png", 100) ;
   ground             = new Ground();
   createNewStar();
-  createNewPowerStar();
   createNewCloud();
   createMountains();
   starTimer          = millis();
+  powerStarTimer     = millis();
   bombTimer          = millis();
   millisBetweenStars =  1000 + random( 1000);
+  millisBetweenPowerStars = 4000 + random(1000);
   millisBetweenBombs = 10000 + random(10000);
+
   
   soundPlayer = new SoundPlayer();
   // Execute method 'loadMusic' in a separate thread
@@ -111,8 +114,15 @@ void draw(){
     stars.get(i).moveStar();
   }
   
-  //power star
-  powerStar.movePowerStar();
+  //power stars
+  if (millis() - powerStarTimer >= millisBetweenPowerStars) { //create a new power star after a certain time
+    createNewPowerStar();
+    millisBetweenPowerStars = 8000 + random(2000);
+    powerStarTimer = millis();
+  }
+  for(int i = 0; i < powerStars.size(); i = i+1){ //existing stars
+    powerStars.get(i).movePowerStar();
+  }
   
   //bombs
   if (millis() - bombTimer >= millisBetweenBombs) { //create a new bomb after a certain time
@@ -139,8 +149,9 @@ void draw(){
   }
 
   //points & lives
-  updatePoints();
-  updateLives();
+  updateWonLives();             // PowerStars
+  updatePointsAndMissedLives(); //Stars
+  checkGameOver();              //Bombs
   text("Zeit: " + seconds + " s" + "\n" + "Sternenstand: " + str(points) + "\n" + "Leben: " + str(lives) , width-200, 100);
   
   //
@@ -159,7 +170,7 @@ private void createNewStar(){
 }
 
 private void createNewPowerStar(){
-  powerStar = new PowerStar("powerStarTail.png", 33);
+  powerStars.add(new PowerStar("powerStarTail.png", 33));
 }
 
 private void createNewBomb(){
@@ -195,52 +206,74 @@ private void verticalGradient(int x, int y, float width, float height, color col
     }
 }
 
-private void updatePoints(){
+private void updatePointsAndMissedLives(){
   for(int i = 0; i < stars.size(); i = i+1){ //all stars
   
-    if(stars.get(i).starPosY + stars.get(i).starHeight >= basket.basketPosY &&
-       stars.get(i).starPosY + stars.get(i).starHeight <= height){  //y-position >= basket
+    if(stars.get(i).posY + stars.get(i).elementHeight >= basket.posY &&
+       stars.get(i).posY + stars.get(i).elementHeight <= height){  //y-position >= basket
        
-       if(stars.get(i).starPosX                          >= basket.basketPosX &&
-          stars.get(i).starPosX + stars.get(i).starWidth <= basket.basketPosX + basket.basketWidth){ //same x-position as basket
+       if(stars.get(i).posX                             >= basket.posX &&
+          stars.get(i).posX + stars.get(i).elementWidth <= basket.posX + basket.elementWidth){ //same x-position as basket
          
-           if(!stars.get(i).missedStar){ //star was not rated yet
-             soundPlayer.soundCollect.play();
-             points = points + 1;
-             collectedStars.add(stars.get(i));
-             stars.remove(i);
-           }
+         if(!stars.get(i).missedCollision){
            
+           soundPlayer.soundCollect.play(); //collision (correct x/y)
+           points = points + 1;
+           collectedStars.add(stars.get(i));
+           stars.remove(i);
+         }
+  
        }else{
-         stars.get(i).missedStar = true;
+         if(!stars.get(i).missedCollision){
+           
+           lives = lives - 1; //missed (correct y / incorrext x)
+           stars.get(i).missedCollision = true;
+           if(lives <= 0){
+             //TODO:  stop all and show game over text
+           }
+         }
        }
     }
-    
   }
 }
 
-private void updateLives(){
-  for(int i = 0; i < bombs.size(); i = i+1){ //all stars
+private void updateWonLives(){
+  for(int i = 0; i < powerStars.size(); i = i+1){ //all powerStars
   
-    if(bombs.get(i).bombPosY + bombs.get(i).bombHeight >= basket.basketPosY &&
-       bombs.get(i).bombPosY + bombs.get(i).bombHeight <= height){  //y-position >= basket
+    if(powerStars.get(i).posY + powerStars.get(i).elementHeight >= basket.posY &&
+       powerStars.get(i).posY + powerStars.get(i).elementHeight <= height){  //y-position >= basket
        
-       if(bombs.get(i).bombPosX                          >= basket.basketPosX &&
-          bombs.get(i).bombPosX + bombs.get(i).bombWidth <= basket.basketPosX + basket.basketWidth){ //same x-position as basket
+       if(powerStars.get(i).posX                                  >= basket.posX &&
+          powerStars.get(i).posX + powerStars.get(i).elementWidth <= basket.posX + basket.elementWidth){ //same x-position as basket
+          
+          if(!powerStars.get(i).missedCollision){
          
-           if(!bombs.get(i).missedBomb){ //bomb was not rated yet
-             soundPlayer.soundBomb.play();
-             lives = lives - 1;
-             collectedBombs.add(bombs.get(i));
-             bombs.remove(i);
-             
-             if(lives == 0){
-               // todo stop all and show game over text
-             }
-           }
+             soundPlayer.soundBomb.play(); //collision (correct x/y) //TODO: Change sound
+             lives = lives + 1;
+             powerStars.remove(i);
+          }
            
        }else{
-         bombs.get(i).missedBomb = true;
+         stars.get(i).missedCollision = true;  //missed (correct y / incorrext x)
+       }
+    }
+  }
+}
+
+private void checkGameOver(){
+  for(int i = 0; i < bombs.size(); i = i+1){ //all bombs
+  
+    if(bombs.get(i).posY + bombs.get(i).elementHeight >= basket.posY &&
+       bombs.get(i).posY + bombs.get(i).elementHeight <= height){  //y-position >= basket
+       
+       if(bombs.get(i).posX                             >= basket.posX &&
+          bombs.get(i).posX + bombs.get(i).elementWidth <= basket.posX + basket.elementWidth){ //same x-position as basket
+         
+             soundPlayer.soundBomb.play();
+             //TODO:  stop all and show game over text
+       
+       }else{
+         bombs.remove(i);
        }
     }
   }

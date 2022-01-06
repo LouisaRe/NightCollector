@@ -1,25 +1,26 @@
-public class PowerStar{
+public class PowerStar extends CollisionElement {
   
-  private PImage   powerStarTail;
-  private float    powerStarTailHeight;
-  private float    powerStarWidth;
-  private float    powerStarHeight;
-  private float    powerStarPosX;
-  private float    powerStarPosY;
-  private float    powerStarSpeed;
+  private PImage  tail;
+  private float   tailHeight;
+  private boolean missedCollision;
    
-  PowerStar(String fileName, int width){
-    this.powerStarTail       = loadImage(fileName);
-    this.powerStarTailHeight = width * (253.05/33);
-    this.powerStarWidth      = width;
-    this.powerStarPosX       = random(windowWidth-powerStarWidth);
-    this.powerStarHeight     = width * (270/33);
-    this.powerStarPosY       = -powerStarHeight;
-    this.powerStarSpeed      = 8 + random(2);
+  PowerStar(String fileName, int width){ 
+    
+    this.elementWidth     = width;
+    this.elementHeight    = width * (270/33);
+    
+    this.posX             = random(windowWidth-elementWidth);
+    this.posY             = -elementHeight;
+    
+    this.speed            = 8 + random(2);
+    
+    this.tail             = loadImage(fileName);
+    this.tailHeight       = width * (253.05/33);
+    this.missedCollision  = false;
   }
   
   void movePowerStar(){
-    powerStarPosY = powerStarPosY + powerStarSpeed; //action: vertical movement
+    posY = posY + speed; //action: vertical movement
     render();
   }
   
@@ -31,10 +32,10 @@ public class PowerStar{
     
     push();
     scale(1,1);
-    image(powerStarTail, powerStarPosX, powerStarPosY);
-    randomColoredCircle(int(powerStarPosX - 0.5 + (powerStarWidth/2)), 
-                        int(powerStarPosY + powerStarTailHeight), 
-                        powerStarWidth);
+    image(tail, posX, posY);
+    randomColoredCircle(int(posX - 0.5 + (elementWidth/2)), 
+                        int(posY + tailHeight), 
+                        elementWidth);
     pop();
   }
 }

@@ -1,25 +1,24 @@
-public class Star{
+public class Star extends CollisionElement{
   
   private PImage   star;
-  private float    starWidth;
-  private float    starHeight;
-  private float    starPosX;
-  private float    starPosY;
-  private float    starSpeed;
-  private boolean  missedStar;
+  private boolean missedCollision;
    
   Star(String fileName, int width){
-    this.star         = loadImage(fileName);
-    this.starWidth    = width;
-    this.starPosX     = random(windowWidth-starWidth);
-    this.starHeight   = width * (270/33);
-    this.starPosY     = -starHeight;
-    this.starSpeed    = 4 + random(3);
-    this.missedStar   = false;
+ 
+    this.elementWidth    = width;
+    this.elementHeight   = width * (270/33);
+    
+    this.posX            = random(windowWidth-elementWidth);
+    this.posY            = -elementHeight;
+
+    this.speed           = 4 + random(3);
+    
+    this.star            = loadImage(fileName);
+    this.missedCollision = false;
   }
   
   void moveStar(){
-    starPosY = starPosY + starSpeed; //action: vertical movement
+    posY = posY + speed; //action: vertical movement
     render();
   }
   
@@ -31,7 +30,7 @@ public class Star{
     
     push();
     scale(1,1);
-    image(star, starPosX, starPosY);
+    image(star, posX, posY);
     pop();
   }
 }

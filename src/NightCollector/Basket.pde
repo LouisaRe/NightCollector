@@ -1,28 +1,28 @@
-public class Basket{
+public class Basket extends CollisionElement{
   
   private PImage basket;
-  private float  basketWidth;
-  private float  basketHeight;
   private float  heightRatio;
-  private float  basketSpeed;
   private float  mousePosX;
-  private float  basketPosX;
-  private float  basketPosY;
   
   
   Basket(String fileName, int width){
-    this.basket         = loadImage(fileName);
-    this.basketWidth    = width;
-    this.basketHeight   = basketWidth * heightRatio;
-    this.heightRatio    = 0.4;
-    this.basketSpeed    = 0.1;
-    this.mousePosX      = 0;
-    this.basketPosX     = mousePosX - (basketWidth/2);
-    this.basketPosY     = 700;
+    
+    this.elementWidth  = width;
+    this.elementHeight = elementWidth * heightRatio;
+    
+    this.posX          = mousePosX - (elementWidth/2);
+    this.posY          = 700;
+    
+    this.speed         = 0.1;
+    
+    this.basket        = loadImage(fileName);
+    this.heightRatio   = 0.4;
+    this.mousePosX     = 0;
+
   }
   
   void moveBasket(){
-      mousePosX = mousePosX+(mouseX-mousePosX)*basketSpeed; //action: roll to mouseX-Position
+      mousePosX = mousePosX+(mouseX-mousePosX)*speed; //action: roll to mouseX-Position
       
       render();
   }
@@ -33,18 +33,18 @@ public class Basket{
     
   private void render(){
        
-    basketPosX = mousePosX-(basketWidth/2);
+    posX = mousePosX-(elementWidth/2);
     
     //prevent basket from running beyond screen
-    if(mousePosX <= basketWidth/2){
-      basketPosX = 0;
+    if(mousePosX <= elementWidth/2){
+      posX = 0;
     }
-    if(mousePosX >= width-(basketWidth/2)){
-      basketPosX = width-basketWidth;
+    if(mousePosX >= width-(elementWidth/2)){
+      posX = width-elementWidth;
     }
     
     push();
-    translate(basketPosX, basketPosY);
+    translate(posX, posY);
     scale(1,1);
     image(basket, 0, 0);
     pop();
