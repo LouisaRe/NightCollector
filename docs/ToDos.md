@@ -99,7 +99,7 @@ You can nearly not loose the game, since you can evade the bomb very easily.
 
 #### ToDos for Version:
 
-- [ ]  Change some core game logic parts
+- [X]  Change some core game logic parts
 - [X]  Create graphic-asset for life power-up
 - [ ]  Find/Create sound-asset for life power-up
 - [ ] Define and tweak the difficulty parameters of the game:
@@ -107,7 +107,7 @@ You can nearly not loose the game, since you can evade the bomb very easily.
   - [ ]  => set time-interval for game speed increase
   - [ ]  => set starting game speed
 - [ ] Create a simple End Screen
-  - [ ] 1 to 3 stars
+  - [X] 1 to 3 stars
     - [ ] Each reached star: blend in after 1s and play a sound (bling-sound, each one higher than the previous one)
        <img src="ToDos.assets/stars_idea.jpg" alt="stars_idea" style="zoom:25%;" />
   - [ ]  incl. Winning/Loosing sound => load asynchronously

@@ -18,7 +18,8 @@ class DrawFunctions{
   
   void drawGameScreen(){
   
-    playTime          = millis()*0.001f;
+     //TODO: Reset all to 0 s if restart
+    float playTime = millis()*0.001f; //scaled time [ms] // TODO: maybe replace playTime completely by seconds:
     // Update seconds ONLY once per second:
     if ((int) playTime > seconds) {
         seconds++;

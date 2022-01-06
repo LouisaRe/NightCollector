@@ -29,7 +29,7 @@ float                millisBetweenBombs;
 int                  bombTimer;
 
 //clouds
-ArrayList<Cloud> clouds = new ArrayList<Cloud>();
+ArrayList<Cloud> clouds;
 
 //basket
 Basket basket;
@@ -47,7 +47,6 @@ int rating;
 ProgressElements progressElements;
 
 //time
-float   playTime;
 int     seconds;
 boolean inNewSecond = false;
 
@@ -83,12 +82,12 @@ private void reset(){
   lives             = 5;
   rating            = 0;
   seconds           = 0;
-  playTime          = millis()*0.001f; //scaled time [ms] // TODO: maybe replace playTime completely by seconds:
   soundPlayer.speed = 0.8;
   stars             = new ArrayList<Star>();
   collectedStars    = new ArrayList<Star>();
   powerStars        = new ArrayList<PowerStar>();
   bombs             = new ArrayList<Bomb>();
+  clouds            = new ArrayList<Cloud>();
 }
 
 
