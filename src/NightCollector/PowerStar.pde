@@ -12,7 +12,7 @@ public class PowerStar extends CollisionElement {
     this.posX             = random(windowWidth-elementWidth);
     this.posY             = -elementHeight;
     
-    this.speed            = 8 + random(2);
+    this.speed            = gameSpeed * 8 + random(2);
     
     this.tail             = loadImage(fileName);
     this.tailHeight       = width * (253.05/33);

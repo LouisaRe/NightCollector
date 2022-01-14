@@ -11,7 +11,7 @@ public class Star extends CollisionElement{
     this.posX            = random(windowWidth-elementWidth);
     this.posY            = -elementHeight;
 
-    this.speed           = 4 + random(3);
+    this.speed           = gameSpeed * 4 + random(3);
     
     this.star            = loadImage(fileName);
     this.missedCollision = false;

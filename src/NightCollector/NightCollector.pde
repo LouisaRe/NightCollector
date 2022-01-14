@@ -1,5 +1,17 @@
 import processing.sound.*;
 
+//GAME BALANCING PARAMETERS
+//adjust as required
+final float startGameSpeed            =  0.70;
+final float gameSpeedIncreaseFactor   =  1.20;
+final float soundSpeedIncreaseFactor  =  1.05;
+final int   secondsUntilSpeedIncrease =    20; 
+final int   startLives                =     5;
+float       starSpawnFactor           =  1500;  //will later be decreased by gameSpeedIncreaseFactor
+float       powerStarSpawnFactor      =  7000;  //will later be decreased by gameSpeedIncreaseFactor
+float       bombSpawnFactor           = 11000;  //will later be decreased by gameSpeedIncreaseFactor
+
+
 //window
 int windowWidth      = 1000;
 int windowHeight     =  800;
@@ -47,20 +59,16 @@ int rating;
 ProgressElements progressElements;
 
 //time
+int     startGameTime;
 int     seconds;
 boolean inNewSecond = false;
 
-//game speed
-float   gameSpeed = 1.0;   // Initial gameSpeed-factor.. Will be increased after some seconds during the game
-
 //sounds
 SoundPlayer soundPlayer;
+boolean     gameMusicLoaded = false;
 
-//game balancing parameters
-final int secondsUntilSpeedIncrease =    10;
-final int starSpawnFactor           =  1000;
-final int powerStarSpawnFactor      =  5000;
-final int bombSpawnFactor           = 10000;
+//game speed
+float gameSpeed;
 
 
 
@@ -70,33 +78,33 @@ void settings()
   thread("loadMusicAsync"); // Execute method 'loadMusic' in a separate thread according to: https://processing.org/reference/thread_.html. Because this takes some seconds
   loadSounds(); // only small files, don't load asynchroniously
   
-  reset();
-  
   size(windowWidth, windowHeight);  
   progressElements   = new ProgressElements("life.png", 20, "ratingStarUnfilled.png", "ratingStarFilled.png", 150, "stopWatch.png", 16.67);
   basket             = new Basket("basket.png", 100) ;
   ground             = new Ground();
-  createNewStar();
-  createNewCloud();
+
   createMountains();
   starTimer          = millis();
   powerStarTimer     = millis();
   bombTimer          = millis();
-  millisBetweenStars =  starSpawnFactor + random(starSpawnFactor);
+  millisBetweenStars      = starSpawnFactor      + random(starSpawnFactor);
   millisBetweenPowerStars = powerStarSpawnFactor + random(powerStarSpawnFactor);
-    millisBetweenBombs = bombSpawnFactor + random(bombSpawnFactor);
+  millisBetweenBombs      = bombSpawnFactor      + random(bombSpawnFactor);
 }
 
 private void reset(){
-  lives             = 5;
-  rating            = 0;
-  seconds           = 0;
-  soundPlayer.speed = 0.8;
-  stars             = new ArrayList<Star>();
-  collectedStars    = new ArrayList<Star>();
-  powerStars        = new ArrayList<PowerStar>();
-  bombs             = new ArrayList<Bomb>();
-  clouds            = new ArrayList<Cloud>();
+  lives           = startLives;
+  rating          = 0;
+  seconds         = 0;
+  startGameTime   = (int) (millis()*0.001f); //scaled time [ms] 
+  gameSpeed       = startGameSpeed;
+  stars           = new ArrayList<Star>();
+  collectedStars  = new ArrayList<Star>();
+  powerStars      = new ArrayList<PowerStar>();
+  bombs           = new ArrayList<Bomb>();
+  clouds          = new ArrayList<Cloud>();
+  createNewCloud();
+  thread("startMusicAsync");
 }
 
 
@@ -108,12 +116,12 @@ void draw(){
       break;
     case GAME_SCREEN :
       drawFuncs.drawGameScreen();
+      showIfMusicStillLoading();
       break;
     case END_SCREEN :
       drawFuncs.drawEndScreen();
       break;
-  }
-  
+  }  
 }
 
 void mouseReleased(){
@@ -186,14 +194,18 @@ private void updatePointsAndMissedLives(){
   
        }else{
          if(!stars.get(i).missedCollision){
-           
            lives = lives - 1; //missed (correct y / incorrext x)
            stars.get(i).missedCollision = true;
            if(lives <= 0){
-             currentScreen = Screen.END_SCREEN; //game over
-           }
+             gameOver();
+             return;
+           } 
+           soundPlayer.soundMissed.play();
          }
        }
+    } else if (stars.get(i).posY > height) {
+      // clean up star when out of screen:
+      stars.remove(i);
     }
   }
 }
@@ -208,15 +220,20 @@ private void updateWonLives(){
           powerStars.get(i).posX + powerStars.get(i).elementWidth <= basket.posX + basket.elementWidth){ //same x-position as basket
           
           if(!powerStars.get(i).missedCollision){
-         
-             soundPlayer.soundBomb.play(); //collision (correct x/y) //TODO: Change sound
+             soundPlayer.soundPowerUp.play(); //collision (correct x/y) //TODO: Change sound
              lives = lives + 1;
              powerStars.remove(i);
           }
            
        }else{
+         if(!powerStars.get(i).missedCollision) {
+           soundPlayer.soundMissedPowerUp.play();
+         }
          powerStars.get(i).missedCollision = true;  //missed (correct y / incorrext x)
        }
+    } else if (powerStars.get(i).posY > height) {
+      // clean up star when out of screen:
+      powerStars.remove(i);
     }
   }
 }
@@ -233,7 +250,8 @@ private void checkGameOver(){
          if(!bombs.get(i).missedCollision){
            
              soundPlayer.soundBomb.play(); //collision (correct x/y)
-             currentScreen = Screen.END_SCREEN; //gmae over
+             gameOver();
+             return;
          }
        }else{
          bombs.get(i).missedCollision = true; //missed (correct y / incorrext x)
@@ -242,47 +260,60 @@ private void checkGameOver(){
   }
 }
 
-private void updateRating(){
-  
-  if(seconds < 60){
-    rating = 0;
-  }
-  else if(seconds < 120){
-    rating = 1;
-  }
-  else if(seconds < 180){
-    rating = 2;
-  }
-  else{
-    rating = 3;
-  }
-  
+private void gameOver(){
+  currentScreen = Screen.END_SCREEN;
+  soundPlayer.music.stop();
+  soundPlayer.soundGameOver.play();
 }
 
-private void updateMusic() {
-  if(soundPlayer.music == null) {
-    textSize(18);
-    textAlign(CENTER);
-    text("game-music is loading...", windowWidth / 2, windowHeight - 20 - 2);
-    textAlign(BASELINE);  // reset text-align
-  } else {
-    if (inNewSecond 
-        && seconds > 11
-        && seconds % secondsUntilSpeedIncrease == 0) {
-          soundPlayer.increaseMusicSpeed();
-        }
+private void updateRating(){
+  if(seconds < 60)      { rating = 0; }
+  else if(seconds < 120){ rating = 1; }
+  else if(seconds < 180){ rating = 2; }
+  else                  { rating = 3; }
+}
+
+private void updateGameSpeed() {
+  if (inNewSecond && seconds > 2 && seconds % secondsUntilSpeedIncrease == 0) {
+    gameSpeed *= gameSpeedIncreaseFactor;
+    starSpawnFactor /= gameSpeedIncreaseFactor;
+    powerStarSpawnFactor /= gameSpeedIncreaseFactor;
+    bombSpawnFactor /= gameSpeedIncreaseFactor;
+    //increase music speed with different factor:
+    soundPlayer.updateMusicSpeed(soundSpeedIncreaseFactor);
+  }
+}
+
+
+private void showIfMusicStillLoading() {
+  if (!gameMusicLoaded) {
+      textSize(18);
+      textAlign(CENTER);
+      text("game-music is still loading...", windowWidth / 2, windowHeight - 20 - 2);
+      textAlign(BASELINE);  // reset text-align
   }
 }
 
 // will run on a separate thread -- called by thread("loadMusicAsync");
 void loadMusicAsync() {
   soundPlayer.music = new SoundFile(this, soundPlayer.musicFileName);
-  soundPlayer.music.loop();
-  soundPlayer.setMusicSpeed();
-  soundPlayer.setMusicVolume();
+}
+
+// will run on a separate thread -- called by thread("startMusicAsync");
+void startMusicAsync() {
+  while (soundPlayer.music == null) {
+    delay(100);
+  }
+  gameMusicLoaded = true;
+  soundPlayer.startMusic();
 }
 
 void loadSounds() {
-  soundPlayer.soundCollect = new SoundFile(this, soundPlayer.soundCollectName); 
-  soundPlayer.soundBomb = new SoundFile(this, soundPlayer.soundBombName); 
+  soundPlayer.soundCollect       = new SoundFile(this, soundPlayer.soundCollectName); 
+  soundPlayer.soundBomb          = new SoundFile(this, soundPlayer.soundBombName); 
+  soundPlayer.soundMissed        = new SoundFile(this, soundPlayer.soundMissedName); 
+  soundPlayer.soundPowerUp       = new SoundFile(this, soundPlayer.soundPowerUpName); 
+  soundPlayer.soundMissedPowerUp = new SoundFile(this, soundPlayer.soundMissedPowerUpName); 
+  soundPlayer.soundGameOver      = new SoundFile(this, soundPlayer.soundGameOverName); 
+  soundPlayer.soundMissedPowerUp.amp(0.5);  // otherwise this sound is too loud
 }

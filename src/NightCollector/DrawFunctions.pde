@@ -19,9 +19,9 @@ class DrawFunctions{
   void drawGameScreen(){
   
      //TODO: Reset all to 0 s if restart
-    float playTime = millis()*0.001f; //scaled time [ms] // TODO: maybe replace playTime completely by seconds:
+    float playTime = millis()*0.001f; //scaled time [ms]
     // Update seconds ONLY once per second:
-    if ((int) playTime > seconds) {
+    if ((int) playTime - startGameTime > seconds) {
         seconds++;
         inNewSecond = true;
     }
@@ -83,8 +83,8 @@ class DrawFunctions{
     progressElements.showLives();
     progressElements.showTime();
     
-    //music
-    updateMusic();  
+    //game speed (increases over time)
+    updateGameSpeed();  
     
     // cleanup at end of draw:
     inNewSecond = false;

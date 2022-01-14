@@ -80,7 +80,7 @@ class ProgressElements{
     
     textSize(18);
     image(time, width - textWidth(text) - 100 - spaceBetween - timeWidth, height-20-timeHeight);
-    text (text + " stars:" + stars.size(), width - textWidth(text) - 100                           , height-20-2);
+    text (text, width - textWidth(text) - 100                           , height-20-2);
   
     pop();
   }

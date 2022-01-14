@@ -11,7 +11,7 @@ public class Bomb extends CollisionElement{
     this.posX            = random(windowWidth-elementWidth);
     this.posY            = - elementHeight;  
     
-    this.speed           = 8 + random(3);
+    this.speed           = gameSpeed * 8 + random(3);
     
     this.bomb            = loadImage(fileName);
     this.missedCollision = false;
