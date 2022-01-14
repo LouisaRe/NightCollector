@@ -101,15 +101,15 @@ You can nearly not loose the game, since you can evade the bomb very easily.
 
 - [X]  Change some core game logic parts
 - [X]  Create graphic-asset for life power-up
-- [ ]  Find/Create sound-asset for life power-up
-- [ ] Define and tweak the difficulty parameters of the game:
-  - [ ]  Target game duration: 1 to 5 minutes?
-  - [ ]  => set time-interval for game speed increase
-  - [ ]  => set starting game speed
+- [x]  Find/Create sound-asset for life power-up
+- [x] Define and tweak the difficulty parameters of the game:
+  - [x]  Target game duration: 1 to 5 minutes?
+  - [x]  => set time-interval for game speed increase
+  - [x]  => set starting game speed
 - [ ] Create a simple End Screen
   - [X] 1 to 3 stars
     - [ ] Each reached star: blend in after 1s and play a sound (bling-sound, each one higher than the previous one)
-       <img src="ToDos.assets/stars_idea.jpg" alt="stars_idea" style="zoom:25%;" />
+         <img src="ToDos.assets/stars_idea.jpg" alt="stars_idea" style="zoom:25%;" />
   - [ ]  incl. Winning/Loosing sound => load asynchronously
 - [ ] Write README.md
 
@@ -131,4 +131,5 @@ You can nearly not loose the game, since you can evade the bomb very easily.
       13. Anne   160s
       14. ME     142s     // fat font or colored or...
       15. Sister 131s
+    
     ```

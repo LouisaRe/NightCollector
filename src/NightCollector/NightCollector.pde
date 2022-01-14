@@ -50,9 +50,18 @@ ProgressElements progressElements;
 int     seconds;
 boolean inNewSecond = false;
 
+//game speed
+float   gameSpeed = 1.0;   // Initial gameSpeed-factor.. Will be increased after some seconds during the game
+
 //sounds
 SoundPlayer soundPlayer;
-int secondsUntilSpeedIncrease = 5;
+
+//game balancing parameters
+final int secondsUntilSpeedIncrease =    10;
+final int starSpawnFactor           =  1000;
+final int powerStarSpawnFactor      =  5000;
+final int bombSpawnFactor           = 10000;
+
 
 
 void settings()
@@ -73,9 +82,9 @@ void settings()
   starTimer          = millis();
   powerStarTimer     = millis();
   bombTimer          = millis();
-  millisBetweenStars =  1000 + random( 1000);
-  millisBetweenPowerStars = 4000 + random(1000);
-  millisBetweenBombs = 10000 + random(10000);
+  millisBetweenStars =  starSpawnFactor + random(starSpawnFactor);
+  millisBetweenPowerStars = powerStarSpawnFactor + random(powerStarSpawnFactor);
+    millisBetweenBombs = bombSpawnFactor + random(bombSpawnFactor);
 }
 
 private void reset(){
@@ -253,7 +262,9 @@ private void updateRating(){
 private void updateMusic() {
   if(soundPlayer.music == null) {
     textSize(18);
-    text("game-music is loading (" + seconds + ")...", 20, windowHeight - 20); 
+    textAlign(CENTER);
+    text("game-music is loading...", windowWidth / 2, windowHeight - 20 - 2);
+    textAlign(BASELINE);  // reset text-align
   } else {
     if (inNewSecond 
         && seconds > 11

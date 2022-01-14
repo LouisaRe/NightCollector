@@ -35,7 +35,7 @@ class DrawFunctions{
     //stars
     if (millis() - starTimer >= millisBetweenStars) { //create a new star after a certain time
       createNewStar();
-      millisBetweenStars = 1000 + random(1000);
+      millisBetweenStars = starSpawnFactor + random(1000);
       starTimer = millis();
     }
     for(int i = 0; i < stars.size(); i = i+1){ //existing stars
@@ -45,7 +45,7 @@ class DrawFunctions{
     //power stars
     if (millis() - powerStarTimer >= millisBetweenPowerStars) { //create a new power star after a certain time
       createNewPowerStar();
-      millisBetweenPowerStars = 8000 + random(2000);
+      millisBetweenPowerStars = powerStarSpawnFactor + random(starSpawnFactor);
       powerStarTimer = millis();
     }
     for(int i = 0; i < powerStars.size(); i = i+1){ //existing stars
@@ -55,7 +55,7 @@ class DrawFunctions{
     //bombs
     if (millis() - bombTimer >= millisBetweenBombs) { //create a new bomb after a certain time
       createNewBomb();
-      millisBetweenBombs = 10000 + random(10000);
+      millisBetweenBombs = bombSpawnFactor + random(bombSpawnFactor);
       bombTimer = millis();
     }
     for(int i = 0; i < bombs.size(); i = i+1){ //existing stars
