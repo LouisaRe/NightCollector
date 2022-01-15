@@ -10,6 +10,9 @@ final int   startLives                =     5;
 final float startStarSpawnFactor      =  1500;
 final float startPowerStarSpawnFactor =  7000;
 final float startBombSpawnFactor      = 11000;
+final int   secondsForOneStar         =    40;
+final int   secondsForTwoStars        =    70;
+final int   secondsForThreeStars      =   100;
 
 //window
 int windowWidth      = 1000;
@@ -273,10 +276,10 @@ private void gameOver(){
 }
 
 private void updateRating(){
-  if(seconds < 60)      { rating = 0; }
-  else if(seconds < 120){ rating = 1; }
-  else if(seconds < 180){ rating = 2; }
-  else                  { rating = 3; }
+  if(     seconds < secondsForOneStar)    { rating = 0; }
+  else if(seconds < secondsForTwoStars)   { rating = 1; }
+  else if(seconds < secondsForThreeStars) { rating = 2; }
+  else                                    { rating = 3; }
 }
 
 private void updateGameSpeed() {
