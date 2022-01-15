@@ -106,14 +106,13 @@ You can nearly not loose the game, since you can evade the bomb very easily.
   - [x]  Target game duration: 1 to 5 minutes?
   - [x]  => set time-interval for game speed increase
   - [x]  => set starting game speed
-- [ ] Create a simple End Screen
-  - [X] 1 to 3 stars
-    - [ ] Each reached star: blend in after 1s and play a sound (bling-sound, each one higher than the previous one)
-         <img src="ToDos.assets/stars_idea.jpg" alt="stars_idea" style="zoom:25%;" />
-  - [ ]  Show reached time
-  - [ ]  Maybe show "No star!" / "Yeah, ok!" / "Great score!" / "Awesome, 3 stars!!", depending on reached stars
+- [x] Create a simple End Screen
+  - [X] 1 to 3 stars:
+    <img src="ToDos.assets/stars_idea.jpg" alt="stars_idea" style="zoom:25%;" />
+      - [x]  Show reached time
+  - [x]  Maybe show "No star!" / "Yeah, ok!" / "Great score!" / "Awesome, 3 stars!!", depending on reached stars
   - [x]  incl. Winning/Loosing sound => load asynchronously
-- [ ] Write README.md
+- [ ] Write README.md / Documentation
 
 
 
@@ -126,11 +125,13 @@ You can nearly not loose the game, since you can evade the bomb very easily.
   - [ ] Show score list:
 
     ```
-         1. Stär   268s
-             ..
-             ..
-         2. John   162s
-         3. Anne   160s
-         4. ME     142s     // fat font or colored or...
-         5. Sister 131s
+     1. Stär   268s
+         ..
+         ..
+     2. John   162s
+     3. Anne   160s
+     4. ME     142s     // fat font or colored or...
+     5. Sister 131s
     ```
+
+- [ ] MAYBE: Each reached star: blend in after 1s and play a sound (bling-sound, each one higher than the previous one)

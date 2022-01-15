@@ -108,6 +108,9 @@ class DrawFunctions{
     
     //button
     drawButton("try again", Screen.GAME_SCREEN);
+    
+    //stats
+    progressElements.showEndStats();
   }
 }
 

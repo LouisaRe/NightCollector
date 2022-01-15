@@ -296,10 +296,11 @@ private void updateGameSpeed() {
 
 private void showIfMusicStillLoading() {
   if (!gameMusicLoaded) {
-      textSize(18);
-      textAlign(CENTER);
-      text("game-music is still loading...", windowWidth / 2, windowHeight - 20 - 2);
-      textAlign(BASELINE);  // reset text-align
+    push();
+    textSize(18);
+    textAlign(CENTER);
+    text("game-music is still loading...", windowWidth / 2, windowHeight - 20 - 2);
+    pop();
   }
 }
 

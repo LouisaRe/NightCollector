@@ -40,6 +40,11 @@ class ProgressElements{
     renderTime();
   }
   
+  void showEndStats() {
+    // show stats for end screen
+    renderEndStats();
+  }
+  
   
   //private functions:
   //############################################################
@@ -77,11 +82,23 @@ class ProgressElements{
     String text = seconds + " s";
     
     push();
-    
     textSize(18);
     image(time, width - textWidth(text) - 100 - spaceBetween - timeWidth, height-20-timeHeight);
     text (text, width - textWidth(text) - 100                           , height-20-2);
+    pop();
+  }
   
+  private void renderEndStats(){
+    String text = "Your time: " + seconds + " s.  ";
+    if      (seconds < secondsForOneStar)    text += "You can do better next time!";
+    else if (seconds < secondsForTwoStars)   text += "Not bad, not bad. But try harder!";
+    else if (seconds < secondsForThreeStars) text += "Great score! But can you reach 3 stars?";
+    else                                     text += "Awesome score, you're a master!!";
+    
+    push();
+    textSize(18);
+    textAlign(CENTER);
+    text (text, width/2, 310);
     pop();
   }
   
