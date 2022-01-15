@@ -7,9 +7,9 @@ final float gameSpeedIncreaseFactor   =  1.20;
 final float soundSpeedIncreaseFactor  =  1.05;
 final int   secondsUntilSpeedIncrease =    20; 
 final int   startLives                =     5;
-float       starSpawnFactor           =  1500;  //will later be decreased by gameSpeedIncreaseFactor
-float       powerStarSpawnFactor      =  7000;  //will later be decreased by gameSpeedIncreaseFactor
-float       bombSpawnFactor           = 11000;  //will later be decreased by gameSpeedIncreaseFactor
+final float startStarSpawnFactor      =  1500;
+final float startPowerStarSpawnFactor =  7000;
+final float startBombSpawnFactor      = 11000;
 
 //window
 int windowWidth      = 1000;
@@ -29,15 +29,19 @@ ArrayList<Star>      stars;
 ArrayList<Star>      collectedStars;
 float                millisBetweenStars;
 int                  starTimer;
+float                starSpawnFactor;
+
 
 ArrayList<PowerStar> powerStars;
 float                millisBetweenPowerStars;
 int                  powerStarTimer;
+float                powerStarSpawnFactor;
 
 //bombs
 ArrayList<Bomb>      bombs;
 float                millisBetweenBombs;
 int                  bombTimer;
+float                bombSpawnFactor;
 
 //clouds
 ArrayList<Cloud> clouds;
@@ -85,9 +89,6 @@ void settings()
   starTimer          = millis();
   powerStarTimer     = millis();
   bombTimer          = millis();
-  millisBetweenStars      = starSpawnFactor      + random(starSpawnFactor);
-  millisBetweenPowerStars = powerStarSpawnFactor + random(powerStarSpawnFactor);
-  millisBetweenBombs      = bombSpawnFactor      + random(bombSpawnFactor);
 }
 
 private void reset(){
@@ -102,6 +103,12 @@ private void reset(){
   bombs           = new ArrayList<Bomb>();
   clouds          = new ArrayList<Cloud>();
   createNewCloud();
+  starSpawnFactor = startStarSpawnFactor;
+  powerStarSpawnFactor = startPowerStarSpawnFactor;
+  bombSpawnFactor = startBombSpawnFactor;
+  millisBetweenStars      = starSpawnFactor      + random(starSpawnFactor);
+  millisBetweenPowerStars = powerStarSpawnFactor + random(powerStarSpawnFactor);
+  millisBetweenBombs      = bombSpawnFactor      + random(bombSpawnFactor);
   thread("startMusicAsync");
 }
 
@@ -260,7 +267,7 @@ private void checkGameOver(){
 
 private void gameOver(){
   currentScreen = Screen.END_SCREEN;
-  soundPlayer.music.stop();
+  if (soundPlayer.music != null) soundPlayer.music.stop();
   soundPlayer.soundGameOver.play();
   cursor();
 }
