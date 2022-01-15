@@ -187,8 +187,8 @@ private void updatePointsAndMissedLives(){
     if(stars.get(i).posY + stars.get(i).elementHeight >= basket.posY &&
        stars.get(i).posY + stars.get(i).elementHeight <= height){  //y-position >= basket
        
-       if(stars.get(i).posX                             >= basket.posX &&
-          stars.get(i).posX + stars.get(i).elementWidth <= basket.posX + basket.elementWidth){ //same x-position as basket
+       if(stars.get(i).posX + stars.get(i).elementWidth / 2 >= basket.posX &&
+          stars.get(i).posX + stars.get(i).elementWidth / 2 <= basket.posX + basket.elementWidth) { //same x-position as basket
          
          if(!stars.get(i).missedCollision){
            
