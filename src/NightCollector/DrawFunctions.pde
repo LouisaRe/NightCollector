@@ -136,6 +136,7 @@ private void drawButton(String text, Screen nextScreen){
     if(clicked){
       if(nextScreen == Screen.GAME_SCREEN){
         reset();
+        noCursor();
       }
       currentScreen = nextScreen;
     }

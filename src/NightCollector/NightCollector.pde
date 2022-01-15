@@ -11,7 +11,6 @@ float       starSpawnFactor           =  1500;  //will later be decreased by gam
 float       powerStarSpawnFactor      =  7000;  //will later be decreased by gameSpeedIncreaseFactor
 float       bombSpawnFactor           = 11000;  //will later be decreased by gameSpeedIncreaseFactor
 
-
 //window
 int windowWidth      = 1000;
 int windowHeight     =  800;
@@ -71,7 +70,6 @@ boolean     gameMusicLoaded = false;
 float gameSpeed;
 
 
-
 void settings()
 {
   soundPlayer        = new SoundPlayer();
@@ -79,8 +77,8 @@ void settings()
   loadSounds(); // only small files, don't load asynchroniously
   
   size(windowWidth, windowHeight);  
-  progressElements   = new ProgressElements("life.png", 20, "ratingStarUnfilled.png", "ratingStarFilled.png", 150, "stopWatch.png", 16.67);
-  basket             = new Basket("basket.png", 100) ;
+  progressElements   = new ProgressElements("img-life.png", 20, "img-ratingStarUnfilled.png", "img-ratingStarFilled.png", 150, "img-stopWatch.png", 16.67);
+  basket             = new Basket("img-basket.png", 100) ;
   ground             = new Ground();
 
   createMountains();
@@ -136,19 +134,19 @@ void mousePressed(){
 //############################################################
 
 private void createNewStar(){
-  stars.add(new Star("star.png", 33));
+  stars.add(new Star("img-star.png", 33));
 }
 
 private void createNewPowerStar(){
-  powerStars.add(new PowerStar("powerStarTail.png", 33));
+  powerStars.add(new PowerStar("img-powerStarTail.png", 33));
 }
 
 private void createNewBomb(){
-  bombs.add(new Bomb("bomb.png", 27));
+  bombs.add(new Bomb("img-bomb.png", 27));
 }
 
 private void createNewCloud(){
-  clouds.add(new Cloud("cloud.png", 392, random(500)));
+  clouds.add(new Cloud("img-cloud.png", 392, random(500)));
 }
 
 private void createMountains(){
@@ -264,6 +262,7 @@ private void gameOver(){
   currentScreen = Screen.END_SCREEN;
   soundPlayer.music.stop();
   soundPlayer.soundGameOver.play();
+  cursor();
 }
 
 private void updateRating(){
