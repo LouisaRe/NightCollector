@@ -22,6 +22,7 @@ public class Basket extends CollisionElement{
   }
   
   void moveBasket(){
+      // adopted from code from meco-course
       mousePosX = mousePosX+(mouseX-mousePosX)*speed; //action: roll to mouseX-Position
       
       render();
