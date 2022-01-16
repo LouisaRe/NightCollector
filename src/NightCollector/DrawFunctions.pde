@@ -24,8 +24,7 @@ class DrawFunctions{
   
   void drawGameScreen(){
   
-     //TODO: Reset all to 0 s if restart
-    float playTime = millis()*0.001f; //scaled time [ms]
+    float playTime = millis()*0.001f; //scaled time
     // Update seconds ONLY once per second:
     if ((int) playTime - startGameTime > seconds) {
         seconds++;
@@ -113,7 +112,7 @@ class DrawFunctions{
     progressElements.showRatingStars();
     
     //button
-    drawButton("try again", Screen.GAME_SCREEN);
+    drawButton("Try again", Screen.GAME_SCREEN);
     
     //stats
     progressElements.showEndStats();
@@ -140,7 +139,8 @@ private void drawButton(String text, Screen nextScreen){
   int y = height/2 - (bHeight/2);
   
   
-  //rect
+  //rect  
+  //idea from https://stackoverflow.com/questions/21608367/processing-a-simple-button
   if (mouseX>x && mouseY>y && mouseX<x+bWidth && mouseY<y+bHeight) { //hover
     if(clicked){
       if(nextScreen == Screen.GAME_SCREEN){
@@ -150,7 +150,7 @@ private void drawButton(String text, Screen nextScreen){
       currentScreen = nextScreen;
     }
     fill(#BE7EA2);
-  }else{
+  }else{ //no hover
     noFill();
   }
   stroke(#ffffff);
@@ -166,11 +166,22 @@ private void drawButton(String text, Screen nextScreen){
 private void drawMountains(){
   for(int i = 0; i < mountains.size(); i = i+1){
       
-      float deltaXleft  =  0.5 * sin(millis()/((i+1)*1000)); //TODO: Connect movement to Audio
+      float deltaXleft  =  0.5 * sin(millis()/((i+1)*1000));
       float deltaYleft  = -0.2 * sin(millis()/((i+1)*1000));
       float deltaXright = -0.5 * sin(millis()/((i+1)*1000));
       float deltaYright = -0.2 * sin(millis()/((i+1)*1000));
       
       mountains.get(i).moveMountain(deltaXleft, deltaYleft, deltaXright, deltaYright);
+    }
+}
+
+// adopted from https://processing.org/examples/lineargradient.html
+private void verticalGradient(int x, int y, float width, float height, color color1, color color2){
+  for (int i = y; i <= y+height; i++) { //from top row to bottom row
+  
+      float colMixRatio  = map(i, y, y+height, 0, 1); //increasing values between 0 & 1
+      color mixedCol     = lerpColor(color1, color2, colMixRatio);
+      stroke(mixedCol);
+      line(x, i, x+width, i);
     }
 }

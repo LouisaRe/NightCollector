@@ -150,6 +150,7 @@ void mousePressed(){
 
 //helper functions:
 //############################################################
+//NEW OBJECTS
 
 private void createNewStar(){
   stars.add(new Star("img-star.png", 33));
@@ -182,15 +183,8 @@ private void createMountains(){
                                     1000, windowHeight,  950, 550));
 }
 
-private void verticalGradient(int x, int y, float width, float height, color color1, color color2){
-  for (int i = y; i <= y+height; i++) { //from top row to bottom row
-  
-      float colMixRatio  = map(i, y, y+height, 0, 1); //increasing values between 0 & 1
-      color mixedCol     = lerpColor(color1, color2, colMixRatio);
-      stroke(mixedCol);
-      line(x, i, x+width, i);
-    }
-}
+//############################################################
+//COLLISION DETECTION
 
 private void updatePointsAndMissedLives(){
   for(int i = 0; i < stars.size(); i = i+1){ //all stars
@@ -234,7 +228,7 @@ private void updateWonLives(){
           powerStars.get(i).posX + powerStars.get(i).elementWidth / 2 <= basket.posX + basket.elementWidth){ //x-range same as basket
           
           if(!powerStars.get(i).missedCollision){
-             soundPlayer.soundPowerUp.play(); //collision (correct x/y) //TODO: Change sound
+             soundPlayer.soundPowerUp.play(); //collision (correct x/y)
              lives = lives + 1;
              powerStars.remove(i);
           }
@@ -276,6 +270,8 @@ private void checkGameOver(){
   }
 }
 
+//############################################################
+
 private void gameOver(){
   currentScreen = Screen.END_SCREEN;
   if (soundPlayer.music != null) soundPlayer.music.stop();
@@ -301,6 +297,8 @@ private void updateGameSpeed() {
   }
 }
 
+//############################################################
+//MUSIC
 
 private void showIfMusicStillLoading() {
   if (!gameMusicLoaded) {
