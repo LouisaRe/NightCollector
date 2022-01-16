@@ -6,13 +6,13 @@ final float startGameSpeed            =  0.70;
 final float gameSpeedIncreaseFactor   =  1.20;
 final float soundSpeedIncreaseFactor  =  1.05;
 final int   secondsUntilSpeedIncrease =    20; 
-final int   startLives                =     2;  // TODO:  5
+final int   startLives                =     5;
 final float startStarSpawnFactor      =  1500;
 final float startPowerStarSpawnFactor =  7000;
 final float startBombSpawnFactor      = 11000;
-final int   secondsForOneStar         =     5;  // TODO:  40
-final int   secondsForTwoStars        =    10;  // TODO:  70
-final int   secondsForThreeStars      =    15;  // TODO: 100
+final int   secondsForOneStar         =    40;
+final int   secondsForTwoStars        =    70;
+final int   secondsForThreeStars      =   100;
 
 //window
 int windowWidth      = 1000;
