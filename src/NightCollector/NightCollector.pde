@@ -120,9 +120,7 @@ private void reset(){
   millisBetweenStars      = starSpawnFactor      + random(starSpawnFactor);
   millisBetweenPowerStars = powerStarSpawnFactor + random(powerStarSpawnFactor);
   millisBetweenBombs      = bombSpawnFactor      + random(bombSpawnFactor);
-  
-  progressElements.ratingStarsAnimationStarted = false;
-  
+  progressElements.resetRatingStarsAnimation();  
   thread("startMusicAsync");
 }
 
@@ -283,7 +281,6 @@ private void gameOver(){
   if (soundPlayer.music != null) soundPlayer.music.stop();
   soundPlayer.soundGameOver.play();
   cursor();
-  //thread("showStarsAfterDelayAsync"); // Execute method in a separate thread according to: https://processing.org/reference/thread_.html
 }
 
 private void updateRating(){

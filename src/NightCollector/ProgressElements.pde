@@ -12,8 +12,9 @@ class ProgressElements{
   private float  timeWidth;
   private float  timeHeight;
   
-  boolean ratingStarsAnimationStarted;
+  private boolean ratingStarsAnimationStarted;
   private int ratingStarsAnimationStartTime;
+  private boolean[] starsFilled = {false, false, false};
   
   
   ProgressElements(String liveFileName, float liveWidth, String unfilledStarFileName, String filledStarFileName, float starSize, String timeFileName, float timeWidth){
@@ -51,6 +52,15 @@ class ProgressElements{
     renderStar(position, filled);
   }
   
+  void resetRatingStarsAnimation() {
+    ratingStarsAnimationStarted = false;
+    ratingStarsAnimationStartTime = 0;
+    for (int i = 0; i < 3; i++) {
+      starsFilled[i] = false;
+    }
+  }
+  
+  
   //private functions:
   //############################################################
 
@@ -65,30 +75,31 @@ class ProgressElements{
   }
 
   private void renderRatingStars(){
-    for(int i = 1; i <= 3; i = i+1){
-      //boolean filled = rating >= i;
-      renderStar(i, false);
-    }
     
     
     if (rating > 0) {
-      int playTime = (int) (millis()*0.001f); //scaled time [ms]    
+      int playTime = millis(); //scaled time [ms]    
       
       if (!ratingStarsAnimationStarted) {
         ratingStarsAnimationStarted = true;
         ratingStarsAnimationStartTime = playTime;
       } else {
-        if (ratingStarsAnimationStartTime < playTime) {
-          renderStar(1, true);
+        if (ratingStarsAnimationStartTime + 1000 < playTime) {
+          starsFilled[0] = true;
         }
-        if (rating > 1 && ratingStarsAnimationStartTime + 1 < playTime) {
-          renderStar(2, true);
+        if (rating > 1 && ratingStarsAnimationStartTime + 2000 < playTime) {
+          starsFilled[1] = true;
         }
-        if (rating > 2 && ratingStarsAnimationStartTime + 2 < playTime) {
-          renderStar(3, true);
+        if (rating > 2 && ratingStarsAnimationStartTime + 3000 < playTime) {
+          starsFilled[2] = true;
         }
       }
     }    
+    
+    // actually render the stars
+    for(int i = 1; i <= 3; i = i+1){
+      renderStar(i, starsFilled[i-1]);
+    }
   }
   
   private void renderStar(int position, boolean filled) {
