@@ -6,22 +6,24 @@ class ProgressElements{
   
   private PImage unfilledStar;
   private PImage filledStar;
-  private float  starWidth;
-  private float  starHeight;
+  private float  starSize;
   
   private PImage time;
   private float  timeWidth;
   private float  timeHeight;
   
-  ProgressElements(String liveFileName, float liveWidth, String unfilledStarFileName, String filledStarFileName, float starWidth, String timeFileName, float timeWidth){
+  boolean ratingStarsAnimationStarted;
+  private int ratingStarsAnimationStartTime;
+  
+  
+  ProgressElements(String liveFileName, float liveWidth, String unfilledStarFileName, String filledStarFileName, float starSize, String timeFileName, float timeWidth){
     this.live          = loadImage(liveFileName);
     this.liveWidth     = liveWidth;
     this.liveHeight    = liveWidth;
     
     this.unfilledStar  = loadImage(unfilledStarFileName);
     this.filledStar    = loadImage(filledStarFileName);
-    this.starWidth     = starWidth;
-    this.starHeight    = starWidth;
+    this.starSize     = starSize;
     
     this.time = loadImage(timeFileName);
     this.timeWidth     = timeWidth;
@@ -44,7 +46,10 @@ class ProgressElements{
     // show stats for end screen
     renderEndStats();
   }
-  
+    
+  void showStar(int position, boolean filled) {
+    renderStar(position, filled);
+  }
   
   //private functions:
   //############################################################
@@ -58,23 +63,38 @@ class ProgressElements{
     }
     pop();
   }
-  
+
   private void renderRatingStars(){
-    float spaceBetween = 10;
-    
-    push();
     for(int i = 1; i <= 3; i = i+1){
-      PImage image;
-      if(rating >= i){
-        image = filledStar;
-        
-      }else{
-        image = unfilledStar;
-      }
-      
-      image(image, (width/2) - (2.5 * starWidth) - (2*spaceBetween) + (i*starWidth) + (i*spaceBetween), 80);
+      //boolean filled = rating >= i;
+      renderStar(i, false);
     }
-    pop();
+    
+    
+    if (rating > 0) {
+      int playTime = (int) (millis()*0.001f); //scaled time [ms]    
+      
+      if (!ratingStarsAnimationStarted) {
+        ratingStarsAnimationStarted = true;
+        ratingStarsAnimationStartTime = playTime;
+      } else {
+        if (ratingStarsAnimationStartTime < playTime) {
+          renderStar(1, true);
+        }
+        if (rating > 1 && ratingStarsAnimationStartTime + 1 < playTime) {
+          renderStar(2, true);
+        }
+        if (rating > 2 && ratingStarsAnimationStartTime + 2 < playTime) {
+          renderStar(3, true);
+        }
+      }
+    }    
+  }
+  
+  private void renderStar(int position, boolean filled) {
+    float spaceBetween = 10;
+    PImage image = filled ? filledStar : unfilledStar;
+    image(image, (width/2) - (2.5 * starSize) - (2*spaceBetween) + (position*starSize) + (position*spaceBetween), 80);
   }
   
   private void renderTime(){

@@ -6,13 +6,13 @@ final float startGameSpeed            =  0.70;
 final float gameSpeedIncreaseFactor   =  1.20;
 final float soundSpeedIncreaseFactor  =  1.05;
 final int   secondsUntilSpeedIncrease =    20; 
-final int   startLives                =     5;
+final int   startLives                =     2;  // TODO:  5
 final float startStarSpawnFactor      =  1500;
 final float startPowerStarSpawnFactor =  7000;
 final float startBombSpawnFactor      = 11000;
-final int   secondsForOneStar         =    40;
-final int   secondsForTwoStars        =    70;
-final int   secondsForThreeStars      =   100;
+final int   secondsForOneStar         =     5;  // TODO:  40
+final int   secondsForTwoStars        =    10;  // TODO:  70
+final int   secondsForThreeStars      =    15;  // TODO: 100
 
 //window
 int windowWidth      = 1000;
@@ -98,8 +98,8 @@ void settings()
 }
 
 void setup(){
-  titleFont    = createFont("fonts/CURLZ___.TTF",80);
-  standardFont = createFont("fonts/lucida sans regular.ttf", 18);
+  titleFont    = createFont("CURLZ___.TTF",80);
+  standardFont = createFont("lucida sans regular.ttf", 18);
 }
 
 private void reset(){
@@ -120,6 +120,9 @@ private void reset(){
   millisBetweenStars      = starSpawnFactor      + random(starSpawnFactor);
   millisBetweenPowerStars = powerStarSpawnFactor + random(powerStarSpawnFactor);
   millisBetweenBombs      = bombSpawnFactor      + random(bombSpawnFactor);
+  
+  progressElements.ratingStarsAnimationStarted = false;
+  
   thread("startMusicAsync");
 }
 
@@ -280,6 +283,7 @@ private void gameOver(){
   if (soundPlayer.music != null) soundPlayer.music.stop();
   soundPlayer.soundGameOver.play();
   cursor();
+  //thread("showStarsAfterDelayAsync"); // Execute method in a separate thread according to: https://processing.org/reference/thread_.html
 }
 
 private void updateRating(){
