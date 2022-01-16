@@ -36,6 +36,7 @@ public class Mountain{
     pop();
   }
   
+  // adopted from code from meco-course
   private void myBezier(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3){
     int steps = 40; // Increase value to increase discretization 
     int drawSteps = steps;

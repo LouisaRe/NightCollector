@@ -14,6 +14,7 @@ public class SoundPlayer {
   SoundFile soundPowerUp;
   SoundFile soundMissedPowerUp;
   SoundFile soundGameOver;
+  SoundFile soundStar; // for End-Screen
   
   // From https://freesound.org/people/Triper/sounds/115792 - Creative Commons 0 license
   final String soundCollectName = "sound-collect.wav"; 
@@ -28,6 +29,8 @@ public class SoundPlayer {
   final String soundMissedPowerUpName = "sound-missed-powerup.wav";
   // From https://freesound.org/people/cabled_mess/sounds/350984 - Creative Commons 0 license
   final String soundGameOverName = "sound-game-over.wav";
+  // From https://freesound.org/people/GameAudio/sounds/220173 - Creative Commons 0 license
+  final String soundStarName = "sound-star.wav";
   
   void resetMusicSpeed() {
     speed = startSpeed;

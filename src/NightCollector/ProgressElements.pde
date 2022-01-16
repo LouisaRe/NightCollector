@@ -6,22 +6,25 @@ class ProgressElements{
   
   private PImage unfilledStar;
   private PImage filledStar;
-  private float  starWidth;
-  private float  starHeight;
+  private float  starSize;
   
   private PImage time;
   private float  timeWidth;
   private float  timeHeight;
   
-  ProgressElements(String liveFileName, float liveWidth, String unfilledStarFileName, String filledStarFileName, float starWidth, String timeFileName, float timeWidth){
+  private int       ratingStarsAnimationState = 0;
+  private int       ratingStarsAnimationStartTime;
+  private boolean[] starsFilled = {false, false, false};
+  
+  
+  ProgressElements(String liveFileName, float liveWidth, String unfilledStarFileName, String filledStarFileName, float starSize, String timeFileName, float timeWidth){
     this.live          = loadImage(liveFileName);
     this.liveWidth     = liveWidth;
     this.liveHeight    = liveWidth;
     
     this.unfilledStar  = loadImage(unfilledStarFileName);
     this.filledStar    = loadImage(filledStarFileName);
-    this.starWidth     = starWidth;
-    this.starHeight    = starWidth;
+    this.starSize     = starSize;
     
     this.time = loadImage(timeFileName);
     this.timeWidth     = timeWidth;
@@ -44,6 +47,18 @@ class ProgressElements{
     // show stats for end screen
     renderEndStats();
   }
+    
+  void showStar(int position, boolean filled) {
+    renderStar(position, filled);
+  }
+  
+  void resetRatingStarsAnimation() {
+    ratingStarsAnimationState = 0;
+    ratingStarsAnimationStartTime = 0;
+    for (int i = 0; i < 3; i++) {
+      starsFilled[i] = false;
+    }
+  }
   
   
   //private functions:
@@ -58,23 +73,60 @@ class ProgressElements{
     }
     pop();
   }
-  
+
   private void renderRatingStars(){
-    float spaceBetween = 10;
-    
-    push();
-    for(int i = 1; i <= 3; i = i+1){
-      PImage image;
-      if(rating >= i){
-        image = filledStar;
-        
-      }else{
-        image = unfilledStar;
-      }
+    // start statemachine for "animation" of the stars
+    if (rating > 0) {
+      int playTime = millis(); //scaled time [ms]    
       
-      image(image, (width/2) - (2.5 * starWidth) - (2*spaceBetween) + (i*starWidth) + (i*spaceBetween), 80);
+      switch (ratingStarsAnimationState) {
+        case 0: // Animation has not yet started
+          if (rating > 0) {
+            ratingStarsAnimationState = 1;
+            ratingStarsAnimationStartTime = playTime;
+          }
+          break;
+        case 1: // Rating is at least one - waiting before "drawing" 1st star and playing 1st sound
+          if (playTime > ratingStarsAnimationStartTime + 1000) {
+            starsFilled[0] = true;
+            soundPlayer.soundStar.rate(1.0);
+            soundPlayer.soundStar.play();
+            if (rating > 1) ratingStarsAnimationState = 2;
+            else ratingStarsAnimationState = 4;
+          }
+          break;
+        case 2: // Rating is at least two - waiting before "drawing" 2nd star and playing 2nd sound
+          if (playTime > ratingStarsAnimationStartTime + 2000) {
+            starsFilled[1] = true;
+            soundPlayer.soundStar.rate(1.25);
+            soundPlayer.soundStar.play();
+            if (rating > 2) ratingStarsAnimationState = 3;
+            else ratingStarsAnimationState = 4;
+          }
+          break;
+        case 3: // Rating is three - waiting before "drawing" 3rd star and playing 3rd sound
+          if (playTime > ratingStarsAnimationStartTime + 3000) {
+            starsFilled[2] = true;
+            soundPlayer.soundStar.rate(1.5);
+            soundPlayer.soundStar.play();
+            ratingStarsAnimationState = 4;
+          }
+          break;
+        case 4: // End of "animation"
+          break;
+      }
+    }    
+    
+    // actually render the stars
+    for(int i = 1; i <= 3; i = i+1){
+      renderStar(i, starsFilled[i-1]);
     }
-    pop();
+  }
+  
+  private void renderStar(int position, boolean filled) {
+    float spaceBetween = 10;
+    PImage image = filled ? filledStar : unfilledStar;
+    image(image, (width/2) - (2.5 * starSize) - (2*spaceBetween) + (position*starSize) + (position*spaceBetween), 80);
   }
   
   private void renderTime(){

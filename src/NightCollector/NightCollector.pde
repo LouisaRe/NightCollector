@@ -120,6 +120,7 @@ private void reset(){
   millisBetweenStars      = starSpawnFactor      + random(starSpawnFactor);
   millisBetweenPowerStars = powerStarSpawnFactor + random(powerStarSpawnFactor);
   millisBetweenBombs      = bombSpawnFactor      + random(bombSpawnFactor);
+  progressElements.resetRatingStarsAnimation();  
   thread("startMusicAsync");
 }
 
@@ -331,6 +332,7 @@ void loadSounds() {
   soundPlayer.soundMissed        = new SoundFile(this, soundPlayer.soundMissedName); 
   soundPlayer.soundPowerUp       = new SoundFile(this, soundPlayer.soundPowerUpName); 
   soundPlayer.soundMissedPowerUp = new SoundFile(this, soundPlayer.soundMissedPowerUpName); 
-  soundPlayer.soundGameOver      = new SoundFile(this, soundPlayer.soundGameOverName); 
+  soundPlayer.soundGameOver      = new SoundFile(this, soundPlayer.soundGameOverName);
+  soundPlayer.soundStar          = new SoundFile(this, soundPlayer.soundStarName);
   soundPlayer.soundMissedPowerUp.amp(0.5);  // otherwise this sound is too loud
 }
