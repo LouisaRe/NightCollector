@@ -23,9 +23,11 @@ Screen        currentScreen = Screen.START_SCREEN;
 DrawFunctions drawFuncs     = new DrawFunctions();
 boolean       clicked       = false;
 
-//colors
+//colors & fonts
 color  bgColor1      = color(  7,  22,  62);
 color  bgColor2      = color(196, 177, 161);
+PFont  titleFont;
+PFont  standardFont;
 
 //stars
 ArrayList<Star>      stars;
@@ -42,6 +44,7 @@ float                powerStarSpawnFactor;
 
 //bombs
 ArrayList<Bomb>      bombs;
+ArrayList<Bomb>      avoidedBombs;
 float                millisBetweenBombs;
 int                  bombTimer;
 float                bombSpawnFactor;
@@ -94,6 +97,11 @@ void settings()
   bombTimer          = millis();
 }
 
+void setup(){
+  titleFont    = createFont("fonts/CURLZ___.TTF",80);
+  standardFont = createFont("fonts/lucida sans regular.ttf", 18);
+}
+
 private void reset(){
   lives           = startLives;
   rating          = 0;
@@ -104,17 +112,16 @@ private void reset(){
   collectedStars  = new ArrayList<Star>();
   powerStars      = new ArrayList<PowerStar>();
   bombs           = new ArrayList<Bomb>();
+  avoidedBombs    = new ArrayList<Bomb>();
   clouds          = new ArrayList<Cloud>();
-  createNewCloud();
-  starSpawnFactor = startStarSpawnFactor;
+  starSpawnFactor      = startStarSpawnFactor;
   powerStarSpawnFactor = startPowerStarSpawnFactor;
-  bombSpawnFactor = startBombSpawnFactor;
+  bombSpawnFactor      = startBombSpawnFactor;
   millisBetweenStars      = starSpawnFactor      + random(starSpawnFactor);
   millisBetweenPowerStars = powerStarSpawnFactor + random(powerStarSpawnFactor);
   millisBetweenBombs      = bombSpawnFactor      + random(bombSpawnFactor);
   thread("startMusicAsync");
 }
-
 
 void draw(){
   
@@ -187,11 +194,10 @@ private void verticalGradient(int x, int y, float width, float height, color col
 private void updatePointsAndMissedLives(){
   for(int i = 0; i < stars.size(); i = i+1){ //all stars
   
-    if(stars.get(i).posY + stars.get(i).elementHeight >= basket.posY &&
-       stars.get(i).posY + stars.get(i).elementHeight <= height){  //y-position >= basket
+    if(stars.get(i).posY + stars.get(i).elementHeight >= basket.posY){  //y-position >= basket
        
        if(stars.get(i).posX + stars.get(i).elementWidth / 2 >= basket.posX &&
-          stars.get(i).posX + stars.get(i).elementWidth / 2 <= basket.posX + basket.elementWidth) { //same x-position as basket
+          stars.get(i).posX + stars.get(i).elementWidth / 2 <= basket.posX + basket.elementWidth) { //x-range same as basket
          
          if(!stars.get(i).missedCollision){
            
@@ -221,11 +227,10 @@ private void updatePointsAndMissedLives(){
 private void updateWonLives(){
   for(int i = 0; i < powerStars.size(); i = i+1){ //all powerStars
   
-    if(powerStars.get(i).posY + powerStars.get(i).elementHeight >= basket.posY &&
-       powerStars.get(i).posY + powerStars.get(i).elementHeight <= height){  //y-position >= basket
+    if(powerStars.get(i).posY + powerStars.get(i).elementHeight >= basket.posY){  //y-position >= basket
        
-       if(powerStars.get(i).posX                                  >= basket.posX &&
-          powerStars.get(i).posX + powerStars.get(i).elementWidth <= basket.posX + basket.elementWidth){ //same x-position as basket
+       if(powerStars.get(i).posX + powerStars.get(i).elementWidth / 2 >= basket.posX &&
+          powerStars.get(i).posX + powerStars.get(i).elementWidth / 2 <= basket.posX + basket.elementWidth){ //x-range same as basket
           
           if(!powerStars.get(i).missedCollision){
              soundPlayer.soundPowerUp.play(); //collision (correct x/y) //TODO: Change sound
@@ -249,11 +254,10 @@ private void updateWonLives(){
 private void checkGameOver(){
   for(int i = 0; i < bombs.size(); i = i+1){ //all bombs
   
-    if(bombs.get(i).posY + bombs.get(i).elementHeight >= basket.posY &&
-       bombs.get(i).posY + bombs.get(i).elementHeight <= height){  //y-position >= basket
+    if(bombs.get(i).posY + bombs.get(i).elementHeight >= basket.posY){  //y-position >= basket
        
-       if(bombs.get(i).posX                             >= basket.posX &&
-          bombs.get(i).posX + bombs.get(i).elementWidth <= basket.posX + basket.elementWidth){ //same x-position as basket
+       if(bombs.get(i).posX + bombs.get(i).elementWidth / 2 >= basket.posX &&
+          bombs.get(i).posX + bombs.get(i).elementWidth / 2 <= basket.posX + basket.elementWidth){ //x-range same as basket
          
          if(!bombs.get(i).missedCollision){
            
@@ -262,6 +266,9 @@ private void checkGameOver(){
              return;
          }
        }else{
+         if(!bombs.get(i).missedCollision){
+           avoidedBombs.add(bombs.get(i));
+         }
          bombs.get(i).missedCollision = true; //missed (correct y / incorrext x)
        }
     }

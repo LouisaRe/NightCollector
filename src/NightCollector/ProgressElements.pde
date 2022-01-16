@@ -72,7 +72,7 @@ class ProgressElements{
         image = unfilledStar;
       }
       
-      image(image, (width/2) - (2.5 * starWidth) - (2*spaceBetween) + (i*starWidth) + (i*spaceBetween), height/2-(starHeight/2) - 200);
+      image(image, (width/2) - (2.5 * starWidth) - (2*spaceBetween) + (i*starWidth) + (i*spaceBetween), 80);
     }
     pop();
   }
@@ -89,16 +89,32 @@ class ProgressElements{
   }
   
   private void renderEndStats(){
-    String text = "Your time: " + seconds + " s.  ";
-    if      (seconds < secondsForOneStar)    text += "You can do better next time!";
-    else if (seconds < secondsForTwoStars)   text += "Not bad, not bad. But try harder!";
-    else if (seconds < secondsForThreeStars) text += "Great score! But can you reach 3 stars?";
-    else                                     text += "Awesome score, you're a master!!";
+    String timeText     = "Your time: ";
+    String secondsText  = seconds + " s.";
+    String starsText    = "Collected stars: " + collectedStars.size();
+    String bombsText    = "Avoided bombs: "   + avoidedBombs.size();
+    String text;
+    if      (seconds < secondsForOneStar)    text = "You can do better next time!";
+    else if (seconds < secondsForTwoStars)   text = "Not bad, not bad. But try harder!";
+    else if (seconds < secondsForThreeStars) text = "Great score! But can you reach 3 stars?";
+    else                                     text = "Awesome score, you're a master!!";
     
     push();
+    
+    //time
+    textFont(titleFont);
+    textSize(40);
+    text (timeText   , width/2 - (textWidth(timeText)/2), 265);
+    textSize(60);
+    text (secondsText, width/2 - (textWidth(secondsText)/2), 320);
+     
+    //text, stars & bombs
+    textFont(standardFont);
+    text (text       , width/2 - (textWidth(text)/2), height - 20);
     textSize(18);
-    textAlign(CENTER);
-    text (text, width/2, 310);
+    text(starsText , 20                                 , height - 20);
+    text(bombsText , width - 20 - (textWidth(bombsText)), height - 20);
+    
     pop();
   }
   

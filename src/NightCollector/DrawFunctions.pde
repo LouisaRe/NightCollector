@@ -10,6 +10,12 @@ class DrawFunctions{
     //ground
     ground.render();
     
+    //title
+    textFont(titleFont);
+    text("Night-"   , width/2 - (textWidth("Night-")   /2), 220 - (textAscent()/2));
+    text("Collector", width/2 - (textWidth("Collector")/2), 220 + (textAscent()/2) + 10);
+    textFont(standardFont);
+    
     //button
     drawButton("Start collecting", Screen.GAME_SCREEN);
   }
@@ -78,8 +84,8 @@ class DrawFunctions{
   
     //points & lives
     updateWonLives();             // PowerStars
-    updatePointsAndMissedLives(); //Stars
-    checkGameOver();              //Bombs
+    updatePointsAndMissedLives(); // Stars
+    checkGameOver();              // Bombs
     progressElements.showLives();
     progressElements.showTime();
     
@@ -154,6 +160,7 @@ private void drawButton(String text, Screen nextScreen){
   fill(#ffffff);
   textSize(24);
   text(text, x + (bWidth/2) - (textWidth(text)/2), y + (bHeight/2) + (textAscent()/2));
+  textSize(18);
 }
 
 private void drawMountains(){
