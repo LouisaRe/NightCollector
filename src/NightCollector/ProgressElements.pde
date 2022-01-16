@@ -12,8 +12,8 @@ class ProgressElements{
   private float  timeWidth;
   private float  timeHeight;
   
-  private boolean ratingStarsAnimationStarted;
-  private int ratingStarsAnimationStartTime;
+  private int       ratingStarsAnimationState = 0;
+  private int       ratingStarsAnimationStartTime;
   private boolean[] starsFilled = {false, false, false};
   
   
@@ -53,7 +53,7 @@ class ProgressElements{
   }
   
   void resetRatingStarsAnimation() {
-    ratingStarsAnimationStarted = false;
+    ratingStarsAnimationState = 0;
     ratingStarsAnimationStartTime = 0;
     for (int i = 0; i < 3; i++) {
       starsFilled[i] = false;
@@ -75,24 +75,42 @@ class ProgressElements{
   }
 
   private void renderRatingStars(){
-    
-    
+    // start statemachine for "animation" of the stars
     if (rating > 0) {
       int playTime = millis(); //scaled time [ms]    
       
-      if (!ratingStarsAnimationStarted) {
-        ratingStarsAnimationStarted = true;
-        ratingStarsAnimationStartTime = playTime;
-      } else {
-        if (ratingStarsAnimationStartTime + 1000 < playTime) {
-          starsFilled[0] = true;
-        }
-        if (rating > 1 && ratingStarsAnimationStartTime + 2000 < playTime) {
-          starsFilled[1] = true;
-        }
-        if (rating > 2 && ratingStarsAnimationStartTime + 3000 < playTime) {
-          starsFilled[2] = true;
-        }
+      switch (ratingStarsAnimationState) {
+        case 0: // Animation has not yet started
+          if (rating > 0) {
+            ratingStarsAnimationState = 1;
+            ratingStarsAnimationStartTime = playTime;
+          }
+          break;
+        case 1: // Rating is at least one - waiting before "drawing" 1st star and playing 1st sound
+          if (playTime > ratingStarsAnimationStartTime + 1000) {
+            starsFilled[0] = true;
+            // TODO play sound;
+            if (rating > 1) ratingStarsAnimationState = 2;
+            else ratingStarsAnimationState = 4;
+          }
+          break;
+        case 2: // Rating is at least two - waiting before "drawing" 2nd star and playing 2nd sound
+          if (playTime > ratingStarsAnimationStartTime + 2000) {
+            starsFilled[1] = true;
+            // TODO play sound;
+            if (rating > 2) ratingStarsAnimationState = 3;
+            else ratingStarsAnimationState = 4;
+          }
+          break;
+        case 3: // Rating is three - waiting before "drawing" 3rd star and playing 3rd sound
+          if (playTime > ratingStarsAnimationStartTime + 3000) {
+            starsFilled[2] = true;
+            // TODO play sound;
+            ratingStarsAnimationState = 4;
+          }
+          break;
+        case 4: // End of "animation"
+          break;
       }
     }    
     
