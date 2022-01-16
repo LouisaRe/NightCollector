@@ -89,7 +89,8 @@ class ProgressElements{
         case 1: // Rating is at least one - waiting before "drawing" 1st star and playing 1st sound
           if (playTime > ratingStarsAnimationStartTime + 1000) {
             starsFilled[0] = true;
-            // TODO play sound;
+            soundPlayer.soundStar.rate(1.0);
+            soundPlayer.soundStar.play();
             if (rating > 1) ratingStarsAnimationState = 2;
             else ratingStarsAnimationState = 4;
           }
@@ -97,7 +98,8 @@ class ProgressElements{
         case 2: // Rating is at least two - waiting before "drawing" 2nd star and playing 2nd sound
           if (playTime > ratingStarsAnimationStartTime + 2000) {
             starsFilled[1] = true;
-            // TODO play sound;
+            soundPlayer.soundStar.rate(1.25);
+            soundPlayer.soundStar.play();
             if (rating > 2) ratingStarsAnimationState = 3;
             else ratingStarsAnimationState = 4;
           }
@@ -105,7 +107,8 @@ class ProgressElements{
         case 3: // Rating is three - waiting before "drawing" 3rd star and playing 3rd sound
           if (playTime > ratingStarsAnimationStartTime + 3000) {
             starsFilled[2] = true;
-            // TODO play sound;
+            soundPlayer.soundStar.rate(1.5);
+            soundPlayer.soundStar.play();
             ratingStarsAnimationState = 4;
           }
           break;
