@@ -98,8 +98,8 @@ void settings()
 }
 
 void setup(){
-  titleFont    = createFont("fonts/CURLZ___.TTF",80);
-  standardFont = createFont("fonts/lucida sans regular.ttf", 18);
+  titleFont    = createFont("CURLZ___.TTF",80);
+  standardFont = createFont("lucida sans regular.ttf", 18);
 }
 
 private void reset(){

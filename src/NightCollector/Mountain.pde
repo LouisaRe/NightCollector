@@ -19,11 +19,11 @@ public class Mountain{
   }
   
   void moveMountain(float deltaXleft, float deltaYleft, float deltaXright, float deltaYright){
-      leftX1  += deltaXleft;
-      leftY1  += deltaYleft;
-      rightX1 += deltaXright;
-      rightY1 += deltaYright;
-    
+    leftX1  += deltaXleft;
+    leftY1  += deltaYleft;
+    rightX1 += deltaXright;
+    rightY1 += deltaYright;
+  
     render();
   }
   
@@ -39,7 +39,7 @@ public class Mountain{
   private void myBezier(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3){
     int steps = 40; // Increase value to increase discretization 
     int drawSteps = steps;
-    //drawSteps = (int)((sin(millis()/100.0f)*0.5f+0.5f)*steps); //for animation
+ 
     for (int it=0; it<drawSteps; it++){
       float t=it/(float)steps;
   
@@ -57,7 +57,7 @@ public class Mountain{
       circle(x,y,2);
       
       //vertical colored lines
-      line(x,800, x, y);
+      line(x,height, x, y);
       stroke(102, 66, 77);
      }
   }
