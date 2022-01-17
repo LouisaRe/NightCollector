@@ -87,8 +87,8 @@ void settings()
   loadSounds(); // only small files, don't load asynchroniously
   
   size(windowWidth, windowHeight);  
-  progressElements   = new ProgressElements("img-life.png", 20, "img-ratingStarUnfilled.png", "img-ratingStarFilled.png", 150, "img-stopWatch.png", 16.67);
-  basket             = new Basket("img-basket.png", 100) ;
+  progressElements   = new ProgressElements("img/img-life.png", 20, "img/img-ratingStarUnfilled.png", "img/img-ratingStarFilled.png", 150, "img/img-stopWatch.png", 16.67);
+  basket             = new Basket("img/img-basket.png", 100) ;
   ground             = new Ground();
 
   createMountains();
@@ -98,8 +98,8 @@ void settings()
 }
 
 void setup(){
-  titleFont    = createFont("CURLZ___.TTF",80);
-  standardFont = createFont("lucida sans regular.ttf", 18);
+  titleFont    = createFont("font/CURLZ___.TTF",80);
+  standardFont = createFont("font/lucida sans regular.ttf", 18);
 }
 
 private void reset(){
@@ -153,19 +153,19 @@ void mousePressed(){
 //NEW OBJECTS
 
 private void createNewStar(){
-  stars.add(new Star("img-star.png", 33));
+  stars.add(new Star("img/img-star.png", 33));
 }
 
 private void createNewPowerStar(){
-  powerStars.add(new PowerStar("img-powerStarTail.png", 33));
+  powerStars.add(new PowerStar("img/img-powerStarTail.png", 33));
 }
 
 private void createNewBomb(){
-  bombs.add(new Bomb("img-bomb.png", 27));
+  bombs.add(new Bomb("img/img-bomb.png", 27));
 }
 
 private void createNewCloud(){
-  clouds.add(new Cloud("img-cloud.png", 392, random(500)));
+  clouds.add(new Cloud("img/img-cloud.png", 392, random(500)));
 }
 
 private void createMountains(){
