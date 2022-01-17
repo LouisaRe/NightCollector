@@ -16,7 +16,6 @@
 - [x] Clouds
   - [x] horizontal movement
   - [x] Random spawning
-  - [ ] Pulsate a bit with the musical beat (performance: try low buffer size)
 - [x] Music and Sounds
   - [x] Call sounds on collision
 - [x] Bombs
@@ -41,7 +40,7 @@
 
 ### Optional Features
 
-- [ ] Countdown timer
+- [x] Countdown timer => changed to regular timer
 - [ ] Various Levels
 
   - [ ] New colors of mountains
@@ -49,17 +48,16 @@
 - [x] Music: 
 
   - [x] Also gets faster the longer you play
-  - [ ] Each time you lose a life: speed increase of 20%
-    - [ ] either realtime calculation
+  - [x] Each time you lose a life: speed increase of 20% => changed to speed increase after every 20 seconds
+    - [x] either realtime calculation
     - [ ] OR: pre-calculated (if performance is an issue)
 - [ ] Special items:
 
   - [ ] Leaves
   - [ ] Snowflakes
-  - [ ] Power-up? => e.g., additional life
-- [ ] Animate mountains based on music
+  - [x] Power-up? => e.g., additional life
+- [x] Animate mountains
 
-  - [ ] Performance?
 
 
 
@@ -112,7 +110,7 @@ You can nearly not loose the game, since you can evade the bomb very easily.
       - [x]  Show reached time
   - [x]  Maybe show "No star!" / "Yeah, ok!" / "Great score!" / "Awesome, 3 stars!!", depending on reached stars
   - [x]  incl. Winning/Loosing sound => load asynchronously
-- [ ] Write README.md / Documentation
+- [x] Write README.md / Documentation
 
 
 
@@ -134,4 +132,4 @@ You can nearly not loose the game, since you can evade the bomb very easily.
      5. Sister 131s
     ```
 
-- [ ] MAYBE: Each reached star: blend in after 1s and play a sound (bling-sound, each one higher than the previous one)
+- [x] MAYBE: Each reached star: blend in after 1s and play a sound (bling-sound, each one higher than the previous one)

@@ -14,7 +14,6 @@ A small game project made with Processing 3 for the class "[Media Computing](htt
 <img width="363" alt="image" src="https://user-images.githubusercontent.com/40007166/149749671-b1961980-822e-45f1-9b6d-dd6d5e679643.png">
 <img width="352" alt="image" src="https://user-images.githubusercontent.com/40007166/149749703-aa7e5a8f-b12f-4fef-acc1-bb11b92ff20c.png">
 </div>
-
 ## Requirements to start the program:
 
 - Use Processing 3.5.4 (https://processing.org/download)
@@ -31,3 +30,9 @@ A small game project made with Processing 3 for the class "[Media Computing](htt
     <img width="500" alt="image" src="https://user-images.githubusercontent.com/40007166/149751187-913a26f9-af4b-412c-b1cf-e616434335de.png">
 
 - Start the game
+
+
+
+## Project documentation
+
+See  [NightCollector_AndreasAmbühl_LouisaReinger.pdf](docs/NightCollector_AndreasAmbühl_LouisaReinger.pdf) 
