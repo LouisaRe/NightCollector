@@ -35,7 +35,12 @@ A small game project made with Processing 3 for the class "[Media Computing](htt
 
 <img width="600" alt="image" src="https://user-images.githubusercontent.com/40007166/149808271-ef2d0531-d47c-4ab2-ad09-c641e468675f.png">
 
-
-## Project documentation
+## Project Documentation
 
 See  [NightCollector_AndreasAmbühl_LouisaReinger.pdf](docs/NightCollector_AndreasAmbühl_LouisaReinger.pdf) 
+
+
+
+## Small Gameplay Movie
+
+<video src="docs/NightCollector.mp4"></video>
