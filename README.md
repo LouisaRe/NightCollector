@@ -9,9 +9,10 @@
 A small game project made with Processing 3 for the class "[Media Computing](https://www.fhnw.ch/de/studium/module/9116320?show_language=en)" at FHNW.
 
 <div>
-<img width="365" alt="image" src="https://user-images.githubusercontent.com/40007166/149749624-75dddf90-e7b7-42ee-8d98-bb1fc3a566fd.png">
-<img width="363" alt="image" src="https://user-images.githubusercontent.com/40007166/149749671-b1961980-822e-45f1-9b6d-dd6d5e679643.png">
-<img width="352" alt="image" src="https://user-images.githubusercontent.com/40007166/149749703-aa7e5a8f-b12f-4fef-acc1-bb11b92ff20c.png">
+<img width="365" alt="titleScreen" src="https://user-images.githubusercontent.com/40007166/149813566-834351cd-98a4-4e37-b4e6-0e7c96d3ad44.png">
+<img width="365" alt="image" src="https://user-images.githubusercontent.com/40007166/149749671-b1961980-822e-45f1-9b6d-dd6d5e679643.png">
+<img width="365" alt="endScreen" src="https://user-images.githubusercontent.com/40007166/149813680-edac41c7-84a4-4f8f-bf7e-04a44fa8ddd3.png">
+
 </div>
 
 ## Requirements to start the program:
