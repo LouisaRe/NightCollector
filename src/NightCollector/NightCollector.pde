@@ -8,11 +8,11 @@ final float soundSpeedIncreaseFactor  =  1.08;
 final int   secondsUntilSpeedIncrease =    20; 
 final int   startLives                =     5;
 final float startStarSpawnFactor      =  1500;
-final float startPowerStarSpawnFactor =  7000;
-final float startBombSpawnFactor      = 11000;
+final float startPowerStarSpawnFactor =  8000;
+final float startBombSpawnFactor      =  9000;
 final int   secondsForOneStar         =    40;
-final int   secondsForTwoStars        =    70;
-final int   secondsForThreeStars      =   100;
+final int   secondsForTwoStars        =    90;
+final int   secondsForThreeStars      =   120;
 
 //window
 int windowWidth      = 1000;
@@ -276,7 +276,6 @@ private void gameOver(){
   currentScreen = Screen.END_SCREEN;
   if (soundPlayer.music != null) soundPlayer.music.stop();
   soundPlayer.soundGameOver.play();
-  cursor();
 }
 
 private void updateRating(){
@@ -288,10 +287,10 @@ private void updateRating(){
 
 private void updateGameSpeed() {
   if (inNewSecond && seconds > 2 && seconds % secondsUntilSpeedIncrease == 0) {
-    gameSpeed *= gameSpeedIncreaseFactor;
-    starSpawnFactor /= gameSpeedIncreaseFactor;
+    gameSpeed            *= gameSpeedIncreaseFactor;
+    starSpawnFactor      /= gameSpeedIncreaseFactor;
     powerStarSpawnFactor /= gameSpeedIncreaseFactor;
-    bombSpawnFactor /= gameSpeedIncreaseFactor;
+    bombSpawnFactor      /= gameSpeedIncreaseFactor;
     //increase music speed with different factor:
     soundPlayer.updateMusicSpeed(soundSpeedIncreaseFactor);
   }

@@ -1,6 +1,9 @@
 class DrawFunctions{
   
   void drawStartScreen(){
+    
+    cursor(ARROW);
+    
     //background
     night();
     
@@ -23,6 +26,12 @@ class DrawFunctions{
   //############################################################
   
   void drawGameScreen(){
+    
+    if (mouseY<50 || mouseY>height-50){ //mouse almost out of window
+      cursor(CROSS);
+    }else{
+     noCursor();
+    }
   
     float playTime = millis()*0.001f; //scaled time
     // Update seconds ONLY once per second:
@@ -40,7 +49,7 @@ class DrawFunctions{
     //stars
     if (millis() - starTimer >= millisBetweenStars) { //create a new star after a certain time
       createNewStar();
-      millisBetweenStars = starSpawnFactor + random(1000);
+      millisBetweenStars = starSpawnFactor + random(starSpawnFactor);
       starTimer = millis();
     }
     for(int i = 0; i < stars.size(); i = i+1){ //existing stars
@@ -50,7 +59,7 @@ class DrawFunctions{
     //power stars
     if (millis() - powerStarTimer >= millisBetweenPowerStars) { //create a new power star after a certain time
       createNewPowerStar();
-      millisBetweenPowerStars = powerStarSpawnFactor + random(starSpawnFactor);
+      millisBetweenPowerStars = powerStarSpawnFactor + random(powerStarSpawnFactor);
       powerStarTimer = millis();
     }
     for(int i = 0; i < powerStars.size(); i = i+1){ //existing stars
@@ -98,6 +107,9 @@ class DrawFunctions{
   //############################################################
   
   void drawEndScreen(){
+    
+    cursor(ARROW);
+    
     //background
     night();
     
@@ -145,7 +157,6 @@ private void drawButton(String text, Screen nextScreen){
     if(clicked){
       if(nextScreen == Screen.GAME_SCREEN){
         reset();
-        noCursor();
       }
       currentScreen = nextScreen;
     }
