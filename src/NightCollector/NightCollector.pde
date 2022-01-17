@@ -102,6 +102,38 @@ void setup(){
   standardFont = createFont("font/lucida sans regular.ttf", 18);
 }
 
+
+void draw(){
+  
+  switch(currentScreen){
+    case START_SCREEN :
+      drawFuncs.drawStartScreen();
+      break;
+    case GAME_SCREEN :
+      drawFuncs.drawGameScreen();
+      showIfMusicStillLoading();
+      break;
+    case END_SCREEN :
+      drawFuncs.drawEndScreen();
+      break;
+  }  
+}
+
+
+
+
+void mouseReleased(){
+  clicked = false;
+}
+
+void mousePressed(){
+  clicked = true;
+}
+
+
+//############################################################
+//Helper methods:
+
 private void reset(){
   lives           = startLives;
   rating          = 0;
@@ -123,34 +155,6 @@ private void reset(){
   progressElements.resetRatingStarsAnimation();  
   thread("startMusicAsync");
 }
-
-void draw(){
-  
-  switch(currentScreen){
-    case START_SCREEN :
-      drawFuncs.drawStartScreen();
-      break;
-    case GAME_SCREEN :
-      drawFuncs.drawGameScreen();
-      showIfMusicStillLoading();
-      break;
-    case END_SCREEN :
-      drawFuncs.drawEndScreen();
-      break;
-  }  
-}
-
-void mouseReleased(){
-  clicked = false;
-}
-
-void mousePressed(){
-  clicked = true;
-}
-
-//helper functions:
-//############################################################
-//NEW OBJECTS
 
 private void createNewStar(){
   stars.add(new Star("img/img-star.png", 33));
@@ -298,7 +302,7 @@ private void updateGameSpeed() {
 }
 
 //############################################################
-//MUSIC
+//MUSIC AND SOUNDS
 
 private void showIfMusicStillLoading() {
   if (!gameMusicLoaded) {
@@ -328,7 +332,7 @@ void startMusicAsync() {
   soundPlayer.startMusic();
 }
 
-void loadSounds() {
+private void loadSounds() {
   soundPlayer.music              = new SoundFile(this, soundPlayer.musicFileName);
   soundPlayer.soundCollect       = new SoundFile(this, soundPlayer.soundCollectName); 
   soundPlayer.soundBomb          = new SoundFile(this, soundPlayer.soundBombName); 
