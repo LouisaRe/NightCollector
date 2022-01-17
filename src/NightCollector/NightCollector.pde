@@ -311,8 +311,10 @@ private void showIfMusicStillLoading() {
 }
 
 // Will run on a separate thread -- called by thread("loadMusicAsync");
-// PROBLEM: This works perfectly on different Mac systems, but NOT on any Windows 10-PCs (tried on 3 different computers)
-// SOLUTION: We converted the music from mp3 to wav. Then Processing can load it very fast and we don't need anymore asynchronious loading.
+// PROBLEM:  This works perfectly on different Mac systems, but NOT on 
+//           any Windows 10-PCs (tried on 3 different computers)
+// SOLUTION: We converted the music from mp3 to wav. Then Processing can load 
+//           it very fast and we don't need anymore asynchronious loading.
 void loadMusicAsync() {
   //soundPlayer.music = new SoundFile(this, soundPlayer.musicFileName);
 }
