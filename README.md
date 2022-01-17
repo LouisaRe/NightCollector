@@ -1,5 +1,14 @@
 # NightCollector
 
+A small game project made with Processing 3 for the class "[Media Computing](https://www.fhnw.ch/de/studium/module/9116320?show_language=en)" at FHNW.
+
+**Team:**
+
+- https://github.com/LouisaRe
+- https://github.com/AndiSwiss
+
+
+
 <div>
 <img width="365" alt="image" src="https://user-images.githubusercontent.com/40007166/149749624-75dddf90-e7b7-42ee-8d98-bb1fc3a566fd.png">
 <img width="363" alt="image" src="https://user-images.githubusercontent.com/40007166/149749671-b1961980-822e-45f1-9b6d-dd6d5e679643.png">
@@ -8,7 +17,7 @@
 
 ## Requirements to start the program:
 
-- Use Processing 5.3.4 (https://processing.org/download)
+- Use Processing 3.5.4 (https://processing.org/download)
 - Open the NightCollector program
 - Make sure that the **Sound** library is installed:
   - on Windows:
