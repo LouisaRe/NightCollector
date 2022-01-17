@@ -44,4 +44,4 @@ See  [NightCollector_AndreasAmbühl_LouisaReinger.pdf](docs/NightCollector_Andre
 
 ## Small Gameplay Movie
 
-<video src="docs/NightCollector.mp4"></video>
+See  [NightCollector.mp4](docs/NightCollector.mp4)
