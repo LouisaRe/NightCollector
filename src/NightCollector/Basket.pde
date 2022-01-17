@@ -1,4 +1,10 @@
-public class Basket extends CollisionElement{
+public class Basket {
+  
+  float   elementHeight;
+  float   elementWidth;
+  
+  float   posX;
+  float   posY;
   
   private PImage basket;
   private float  heightRatio;
@@ -13,8 +19,6 @@ public class Basket extends CollisionElement{
     this.posX          = mousePosX - (elementWidth/2);
     this.posY          = 700;
     
-    this.speed         = 1;
-    
     this.basket        = loadImage(fileName);
     this.heightRatio   = 0.4;
     this.mousePosX     = 0;
@@ -22,9 +26,7 @@ public class Basket extends CollisionElement{
   }
   
   void moveBasket(){
-      // adopted from code from meco-course
-      mousePosX = mousePosX+(mouseX-mousePosX)*speed; //action: roll to mouseX-Position
-      
+      mousePosX = mouseX;
       render();
   }
   
