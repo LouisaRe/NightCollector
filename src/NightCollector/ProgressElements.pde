@@ -1,8 +1,8 @@
 class ProgressElements{
   
-  private PImage live;
-  private float  liveWidth;
-  private float  liveHeight;
+  private PImage life;
+  private float  lifeWidth;
+  private float  lifeHeight;
   
   private PImage unfilledStar;
   private PImage filledStar;
@@ -17,10 +17,10 @@ class ProgressElements{
   private boolean[] starsFilled = {false, false, false};
   
   
-  ProgressElements(String liveFileName, float liveWidth, String unfilledStarFileName, String filledStarFileName, float starSize, String timeFileName, float timeWidth){
-    this.live          = loadImage(liveFileName);
-    this.liveWidth     = liveWidth;
-    this.liveHeight    = liveWidth;
+  ProgressElements(String lifeFileName, float lifeWidth, String unfilledStarFileName, String filledStarFileName, float starSize, String timeFileName, float timeWidth){
+    this.life          = loadImage(lifeFileName);
+    this.lifeWidth     = lifeWidth;
+    this.lifeHeight    = lifeWidth;
     
     this.unfilledStar  = loadImage(unfilledStarFileName);
     this.filledStar    = loadImage(filledStarFileName);
@@ -31,8 +31,8 @@ class ProgressElements{
     this.timeHeight    = timeWidth * (20/16.67);
   }
   
-  void showLives(){
-    renderLives();
+  void showlifes(){
+    renderlifes();
   }
   
   void showRatingStars(){
@@ -64,12 +64,12 @@ class ProgressElements{
   //private functions:
   //############################################################
 
-  private void renderLives(){
+  private void renderlifes(){
     float spaceBetween = 10;
     
     push();
-    for(int i = 0; i < lives; i = i+1){
-      image(live, 100 + (i*liveWidth) + (i*spaceBetween), height-20-liveHeight);
+    for(int i = 0; i < lifes; i = i+1){
+      image(life, 100 + (i*lifeWidth) + (i*spaceBetween), height-20-lifeHeight);
     }
     pop();
   }

@@ -90,11 +90,11 @@ class DrawFunctions{
       clouds.get(i).moveCloud(playTime, i%3);
     }
   
-    //points & lives
-    updateWonLives();             // PowerStars
-    updatePointsAndMissedLives(); // Stars
+    //points & lifes
+    updateWonlifes();             // PowerStars
+    updatePointsAndMissedlifes(); // Stars
     checkGameOver();              // Bombs
-    progressElements.showLives();
+    progressElements.showlifes();
     progressElements.showTime();
     
     //game speed (increases over time)

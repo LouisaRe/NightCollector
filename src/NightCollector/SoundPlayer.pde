@@ -3,9 +3,9 @@ public class SoundPlayer {
   // For music
   SoundFile music; // is null until fully loaded
   final String musicFileName = "sound/sound-ararat-deep.wav"; // Music from a band of mine: https://andreasmusic.ch/ararat-quintet
-  final float startSpeed = 0.8;
-  float speed;
-  float musicVolume = 0.3;
+  private final float startSpeed = 0.8;
+  private float speed;
+  private final float musicVolume = 0.3;
   
   // For game sounds
   SoundFile soundCollect;
@@ -32,15 +32,6 @@ public class SoundPlayer {
   // From https://freesound.org/people/GameAudio/sounds/220173 - Creative Commons 0 license
   final String soundStarName = "sound/sound-star.wav";
   
-  void resetMusicSpeed() {
-    speed = startSpeed;
-    if (music != null) music.rate(speed);
-  }
-  
-  void setMusicVolume() {
-    if (music != null) music.amp(musicVolume); // change volume (1.0 is max, 0.0 is silence)
-  }
-  
   void startMusic() {
     if (music != null) soundPlayer.music.loop();
     soundPlayer.resetMusicSpeed();
@@ -51,4 +42,17 @@ public class SoundPlayer {
     speed *= soundSpeedIncreaseFactor;
     if (music != null) music.rate(speed);
   }
+  
+  //private functions:
+  //############################################################
+
+  private void resetMusicSpeed() {
+    speed = startSpeed;
+    if (music != null) music.rate(speed);
+  }
+  
+  private void setMusicVolume() {
+    if (music != null) music.amp(musicVolume); // change volume (1.0 is max, 0.0 is silence)
+  }
+  
 }

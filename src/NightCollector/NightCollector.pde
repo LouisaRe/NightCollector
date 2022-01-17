@@ -6,7 +6,7 @@ final float startGameSpeed            =  0.80;
 final float gameSpeedIncreaseFactor   =  1.20;
 final float soundSpeedIncreaseFactor  =  1.08;
 final int   secondsUntilSpeedIncrease =    20; 
-final int   startLives                =     5;
+final int   startlifes                =     5;
 final float startStarSpawnFactor      =  1500;
 final float startPowerStarSpawnFactor =  8000;
 final float startBombSpawnFactor      =  9000;
@@ -62,8 +62,8 @@ Mountain mountain;
 //ground
 Ground ground;
 
-//rating, lives
-int lives;
+//rating, lifes
+int lifes;
 int rating;
 ProgressElements progressElements;
 
@@ -102,8 +102,40 @@ void setup(){
   standardFont = createFont("font/lucida sans regular.ttf", 18);
 }
 
+
+void draw(){
+  
+  switch(currentScreen){
+    case START_SCREEN :
+      drawFuncs.drawStartScreen();
+      break;
+    case GAME_SCREEN :
+      drawFuncs.drawGameScreen();
+      showIfMusicStillLoading();
+      break;
+    case END_SCREEN :
+      drawFuncs.drawEndScreen();
+      break;
+  }  
+}
+
+
+
+
+void mouseReleased(){
+  clicked = false;
+}
+
+void mousePressed(){
+  clicked = true;
+}
+
+
+//############################################################
+//Helper methods:
+
 private void reset(){
-  lives           = startLives;
+  lifes           = startlifes;
   rating          = 0;
   seconds         = 0;
   startGameTime   = (int) (millis()*0.001f); //scaled time [ms] 
@@ -123,34 +155,6 @@ private void reset(){
   progressElements.resetRatingStarsAnimation();  
   thread("startMusicAsync");
 }
-
-void draw(){
-  
-  switch(currentScreen){
-    case START_SCREEN :
-      drawFuncs.drawStartScreen();
-      break;
-    case GAME_SCREEN :
-      drawFuncs.drawGameScreen();
-      showIfMusicStillLoading();
-      break;
-    case END_SCREEN :
-      drawFuncs.drawEndScreen();
-      break;
-  }  
-}
-
-void mouseReleased(){
-  clicked = false;
-}
-
-void mousePressed(){
-  clicked = true;
-}
-
-//helper functions:
-//############################################################
-//NEW OBJECTS
 
 private void createNewStar(){
   stars.add(new Star("img/img-star.png", 33));
@@ -186,7 +190,7 @@ private void createMountains(){
 //############################################################
 //COLLISION DETECTION
 
-private void updatePointsAndMissedLives(){
+private void updatePointsAndMissedlifes(){
   for(int i = 0; i < stars.size(); i = i+1){ //all stars
   
     if(stars.get(i).posY + stars.get(i).elementHeight >= basket.posY){  //y-position >= basket
@@ -203,9 +207,9 @@ private void updatePointsAndMissedLives(){
   
        }else{
          if(!stars.get(i).missedCollision){
-           lives = lives - 1; //missed (correct y / incorrext x)
+           lifes = lifes - 1; //missed (correct y / incorrext x)
            stars.get(i).missedCollision = true;
-           if(lives <= 0){
+           if(lifes <= 0){
              gameOver();
              return;
            } 
@@ -219,7 +223,7 @@ private void updatePointsAndMissedLives(){
   }
 }
 
-private void updateWonLives(){
+private void updateWonlifes(){
   for(int i = 0; i < powerStars.size(); i = i+1){ //all powerStars
   
     if(powerStars.get(i).posY + powerStars.get(i).elementHeight >= basket.posY){  //y-position >= basket
@@ -229,7 +233,7 @@ private void updateWonLives(){
           
           if(!powerStars.get(i).missedCollision){
              soundPlayer.soundPowerUp.play(); //collision (correct x/y)
-             lives = lives + 1;
+             lifes = lifes + 1;
              powerStars.remove(i);
           }
            
@@ -297,7 +301,7 @@ private void updateGameSpeed() {
 }
 
 //############################################################
-//MUSIC
+//MUSIC AND SOUNDS
 
 private void showIfMusicStillLoading() {
   if (!gameMusicLoaded) {
@@ -327,7 +331,7 @@ void startMusicAsync() {
   soundPlayer.startMusic();
 }
 
-void loadSounds() {
+private void loadSounds() {
   soundPlayer.music              = new SoundFile(this, soundPlayer.musicFileName);
   soundPlayer.soundCollect       = new SoundFile(this, soundPlayer.soundCollectName); 
   soundPlayer.soundBomb          = new SoundFile(this, soundPlayer.soundBombName); 
