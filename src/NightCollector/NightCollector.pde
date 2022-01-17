@@ -2,9 +2,9 @@ import processing.sound.*;
 
 //GAME BALANCING PARAMETERS
 //adjust as required
-final float startGameSpeed            =  0.70;
+final float startGameSpeed            =  0.80;
 final float gameSpeedIncreaseFactor   =  1.20;
-final float soundSpeedIncreaseFactor  =  1.05;
+final float soundSpeedIncreaseFactor  =  1.08;
 final int   secondsUntilSpeedIncrease =    20; 
 final int   startLives                =     5;
 final float startStarSpawnFactor      =  1500;
@@ -310,9 +310,11 @@ private void showIfMusicStillLoading() {
   }
 }
 
-// will run on a separate thread -- called by thread("loadMusicAsync");
+// Will run on a separate thread -- called by thread("loadMusicAsync");
+// PROBLEM: This works perfectly on different Mac systems, but NOT on any Windows 10-PCs (tried on 3 different computers)
+// SOLUTION: We converted the music from mp3 to wav. Then Processing can load it very fast and we don't need anymore asynchronious loading.
 void loadMusicAsync() {
-  soundPlayer.music = new SoundFile(this, soundPlayer.musicFileName);
+  //soundPlayer.music = new SoundFile(this, soundPlayer.musicFileName);
 }
 
 // will run on a separate thread -- called by thread("startMusicAsync");
@@ -325,6 +327,7 @@ void startMusicAsync() {
 }
 
 void loadSounds() {
+  soundPlayer.music              = new SoundFile(this, soundPlayer.musicFileName);
   soundPlayer.soundCollect       = new SoundFile(this, soundPlayer.soundCollectName); 
   soundPlayer.soundBomb          = new SoundFile(this, soundPlayer.soundBombName); 
   soundPlayer.soundMissed        = new SoundFile(this, soundPlayer.soundMissedName); 
