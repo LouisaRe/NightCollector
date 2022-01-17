@@ -13,7 +13,7 @@ public class Basket extends CollisionElement{
     this.posX          = mousePosX - (elementWidth/2);
     this.posY          = 700;
     
-    this.speed         = 0.1;
+    this.speed         = 1;
     
     this.basket        = loadImage(fileName);
     this.heightRatio   = 0.4;
